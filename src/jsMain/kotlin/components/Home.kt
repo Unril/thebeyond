@@ -2,20 +2,14 @@ package components
 
 import mui.material.Box
 import mui.material.Typography
+import mui.material.styles.TypographyVariant
 import react.FC
 import react.Props
-import react.useEffectOnce
 
 val Home = FC<Props> {
-    println("home")
-    useEffectOnce {
-        println("home start")
-        cleanup {
-            println("home end")
-        }
-    }
     Box {
         Typography {
+            variant = TypographyVariant.h4
             +"Hello world!"
         }
     }

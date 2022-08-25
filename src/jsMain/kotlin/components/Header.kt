@@ -11,7 +11,12 @@ import react.FC
 import react.Props
 import react.router.dom.Link as RouterLink
 
-val Header = FC<Props> {
+external interface HeaderProps : Props {
+    var authenticated: Boolean
+    var logout: () -> Unit
+}
+
+val Header = FC<HeaderProps> { props ->
     AppBar {
         position = AppBarPosition.static
         Toolbar {
@@ -35,6 +40,7 @@ val Header = FC<Props> {
                 component = RouterLink
                 to = PATH_GAME
                 color = ButtonColor.inherit
+                disabled = !props.authenticated
                 sx {
                     marginLeft = 8.px
                     marginRight = 8.px
@@ -45,6 +51,7 @@ val Header = FC<Props> {
                 component = RouterLink
                 to = PATH_CONFIGURATION
                 color = ButtonColor.inherit
+                disabled = !props.authenticated
                 sx {
                     marginLeft = 8.px
                     marginRight = 8.px
@@ -57,11 +64,25 @@ val Header = FC<Props> {
                     flexGrow = number(1.0)
                 }
             }
-            Button {
-                component = RouterLink
-                to = PATH_SIGN_IN
-                color = ButtonColor.inherit
-                +"Sign in"
+            if (props.authenticated) {
+                Button {
+                    onClick = { props.logout() }
+                    color = ButtonColor.inherit
+                    +"Logout"
+                }
+            } else {
+                Button {
+                    component = RouterLink
+                    to = PATH_REGISTER
+                    color = ButtonColor.inherit
+                    +"Register"
+                }
+                Button {
+                    component = RouterLink
+                    to = PATH_LOGIN
+                    color = ButtonColor.inherit
+                    +"Login"
+                }
             }
         }
     }
