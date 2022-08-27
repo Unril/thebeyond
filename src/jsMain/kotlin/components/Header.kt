@@ -20,6 +20,9 @@ val Header = FC<HeaderProps> { props ->
     AppBar {
         position = AppBarPosition.static
         Toolbar {
+            sx{
+                height = 64.px
+            }
             Icon {
                 sx {
                     display = Display.flex

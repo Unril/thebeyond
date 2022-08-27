@@ -55,7 +55,7 @@ val AppRoutes = FC<Props> {
     val navigate = useNavigate()
     val (token, setToken) = useState {
         println("Loading token")
-        ""
+        "test"
     }
 
     Routes {

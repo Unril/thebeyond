@@ -1,2 +1,2 @@
 config.devServer.historyApiFallback = true
-config.devtool = 'eval-source-map'
+config.devtool = 'eval-cheap-source-map'

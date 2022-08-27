@@ -1,3 +1,5 @@
+import org.apache.tools.ant.DirectoryScanner
+
 pluginManagement {
     repositories {
         mavenCentral()
@@ -6,3 +8,5 @@ pluginManagement {
 }
 rootProject.name = "thebeyond"
 
+
+DirectoryScanner.removeDefaultExclude("phaser/*.ts")
