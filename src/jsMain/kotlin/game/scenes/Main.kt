@@ -1,48 +1,24 @@
 package game.scenes
 
-import Phaser.GameObjects.BitmapText
 import Phaser.GameObjects.Shader
-import Phaser.GameObjects.Text
 import Phaser.Scene
-import Phaser.Types.Loader.FileTypes.BitmapFontFileConfig
+import constants.AtlasFrames
+import constants.AtlasKeys
 import constants.SceneKeys
-import constants.SpritesheetKeys
-import kotlinx.js.jso
+import constants.ShaderKeys
 
-class StartScene : Scene(SceneKeys.START) {
+class Main : Scene(SceneKeys.MAIN) {
     private lateinit var _cursors: Phaser.Types.Input.Keyboard.CursorKeys
     private lateinit var _player: Phaser.GameObjects.Sprite
 
     private lateinit var _stars: Shader
-    private lateinit var _debugText: BitmapText
-
-    override fun preload() {
-        load.glsl(
-            "stars",
-            "assets/shaders/stars.frag"
-        )
-        load.atlasXML(
-            SpritesheetKeys.SPACE_SHOOTER,
-            "assets/spritesheet/space_shooter.png",
-            "assets/spritesheet/space_shooter.xml"
-        )
-        load.bitmapFont(jso<BitmapFontFileConfig> {
-            key = "font_roboto"
-            textureURL = "assets/fonts/bitmap/roboto_white.png"
-            fontDataURL = "assets/fonts/bitmap/roboto.xml"
-        })
-    }
 
     override fun create() {
-        _stars = add.shader("stars", 0, 0, scale.gameSize.width, scale.gameSize.height)
+        _stars = add.shader(ShaderKeys.STARS, 0, 0, scale.gameSize.width, scale.gameSize.height)
             .setOrigin(0, 0)
             .setScrollFactor(0, 0)
 
-        _debugText = this.add.bitmapText(10, 10, "font_roboto", "0.0", 16)
-            .setOrigin(0, 0)
-            .setScrollFactor(0, 0)
-
-        _player = add.sprite(100, 100, SpritesheetKeys.SPACE_SHOOTER, "playerShip1_blue.png")
+        _player = add.sprite(100, 100, AtlasKeys.SPACE_SHOOTER, AtlasFrames.SPACE_SHOOTER_PLAYER_SHIP_1_BLUE)
         cameras.main.startFollow(_player, false, 0.05, 0.05)
 
         _cursors = input.keyboard.createCursorKeys()
@@ -74,8 +50,6 @@ class StartScene : Scene(SceneKeys.START) {
             _player.setAngle(180)
             body.setVelocityY(vel);
         }
-
-        _debugText.setText(game.loop.actualFps.toString())
     }
 
     fun resize(

@@ -91,33 +91,72 @@ inline operator fun `T$19`.set(key: String, value: String) {
 }
 
 external interface SettingsConfig {
+    /**
+     * The unique key of this Scene. Must be unique within the entire Game instance.
+     */
     var key: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Does the Scene start as active or not? An active Scene updates each step.
+     */
     var active: Boolean?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Does the Scene start as visible or not? A visible Scene renders each step.
+     */
     var visible: Boolean?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Files to be loaded before the Scene begins.
+     */
     var pack: dynamic /* Boolean? | Phaser.Types.Loader.FileTypes.PackFileSection? */
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * An optional Camera configuration object.
+     */
     var cameras: dynamic /* Phaser.Types.Cameras.Scene2D.JSONCamera? | Array<Phaser.Types.Cameras.Scene2D.JSONCamera>? */
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Overwrites the default injection map for a scene.
+     */
     var map: `T$19`?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Extends the injection map for a scene.
+     */
     var mapAdd: `T$19`?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The physics configuration object for the Scene.
+     */
     var physics: PhysicsConfig?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The loader configuration object for the Scene.
+     */
     var loader: LoaderConfig?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The plugin configuration object for the Scene.
+     */
     var plugins: dynamic /* Boolean? | Any? */
         get() = definedExternally
         set(value) = definedExternally

@@ -394,17 +394,17 @@ external interface Tint {
     var tintFill: Boolean
     fun clearTint(): Tint /* this */
     fun setTint(
-        topLeft: Number = definedExternally,
-        topRight: Number = definedExternally,
-        bottomLeft: Number = definedExternally,
-        bottomRight: Number = definedExternally
+        topLeft: Number? = definedExternally,
+        topRight: Number? = definedExternally,
+        bottomLeft: Number? = definedExternally,
+        bottomRight: Number? = definedExternally
     ): Tint /* this */
 
     fun setTintFill(
-        topLeft: Number = definedExternally,
-        topRight: Number = definedExternally,
-        bottomLeft: Number = definedExternally,
-        bottomRight: Number = definedExternally
+        topLeft: Number? = definedExternally,
+        topRight: Number? = definedExternally,
+        bottomLeft: Number? = definedExternally,
+        bottomRight: Number? = definedExternally
     ): Tint /* this */
 
     var tint: Number

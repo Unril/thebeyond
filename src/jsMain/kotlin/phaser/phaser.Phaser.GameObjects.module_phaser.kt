@@ -261,17 +261,17 @@ open external class DynamicBitmapText : BitmapText {
     override var tintFill: Boolean
     override fun clearTint(): DynamicBitmapText /* this */
     override fun setTint(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): DynamicBitmapText /* this */
 
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): DynamicBitmapText /* this */
 
     override var tint: Number
@@ -644,19 +644,68 @@ open external class BitmapText : GameObject, Alpha, BlendMode, Depth, Mask, Orig
     override var tintBottomLeft: Number
     override var tintBottomRight: Number
     override var tintFill: Boolean
+
+    /**
+     * Clears all tint values associated with this Game Object.
+     *
+     * Immediately sets the color values back to 0xffffff and the tint type to 'additive',
+     * which results in no visible change to the texture.
+     */
     override fun clearTint(): BitmapText /* this */
+
+    /**
+     * Sets an additive tint on this Game Object.
+     *
+     * The tint works by taking the pixel color values from the Game Objects texture, and then
+     * multiplying it by the color value of the tint. You can provide either one color value,
+     * in which case the whole Game Object will be tinted in that color. Or you can provide a color
+     * per corner. The colors are blended together across the extent of the Game Object.
+     *
+     * To modify the tint color once set, either call this method again with new values or use the
+     * `tint` property to set all colors at once. Or, use the properties `tintTopLeft`, `tintTopRight,
+     * `tintBottomLeft` and `tintBottomRight` to set the corner color values independently.
+     *
+     * To remove a tint call `clearTint`.
+     *
+     * To swap this from being an additive tint to a fill based tint set the property `tintFill` to `true`.
+     * @param topLeft The tint being applied to the top-left of the Game Object. If no other values are given this value is applied evenly, tinting the whole Game Object. Default 0xffffff.
+     * @param topRight The tint being applied to the top-right of the Game Object.
+     * @param bottomLeft The tint being applied to the bottom-left of the Game Object.
+     * @param bottomRight The tint being applied to the bottom-right of the Game Object.
+     */
     override fun setTint(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): BitmapText /* this */
 
+    /**
+     * Sets a fill-based tint on this Game Object.
+     *
+     * Unlike an additive tint, a fill-tint literally replaces the pixel colors from the texture
+     * with those in the tint. You can use this for effects such as making a player flash 'white'
+     * if hit by something. You can provide either one color value, in which case the whole
+     * Game Object will be rendered in that color. Or you can provide a color per corner. The colors
+     * are blended together across the extent of the Game Object.
+     *
+     * To modify the tint color once set, either call this method again with new values or use the
+     * `tint` property to set all colors at once. Or, use the properties `tintTopLeft`, `tintTopRight,
+     * `tintBottomLeft` and `tintBottomRight` to set the corner color values independently.
+     *
+     * To remove a tint call `clearTint`.
+     *
+     * To swap this from being a fill-tint to an additive tint set the property `tintFill` to `false`.
+     * @param topLeft The tint being applied to the top-left of the Game Object. If not other values are given this value is applied evenly, tinting the whole Game Object. Default 0xffffff.
+     * @param topRight The tint being applied to the top-right of the Game Object.
+     * @param bottomLeft The tint being applied to the bottom-left of the Game Object.
+     * @param bottomRight The tint being applied to the bottom-right of the Game Object.
+     */
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): BitmapText /* this */
 
     override var tint: Number
@@ -1658,12 +1707,18 @@ open external class Extern(scene: Scene) : GameObject, Alpha, BlendMode, Depth, 
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Extern /* this */
-    override fun setTint(topLeft: Number, topRight: Number, bottomLeft: Number, bottomRight: Number): Extern /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Extern /* this */
+
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): Extern /* this */
 
     override var tint: Number
@@ -3885,12 +3940,18 @@ open external class Image : GameObject, Alpha, BlendMode, Depth, Flip, FX, GetBo
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Image /* this */
-    override fun setTint(topLeft: Number, topRight: Number, bottomLeft: Number, bottomRight: Number): Image /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Image /* this */
+
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): Image /* this */
 
     override var tint: Number
@@ -5141,17 +5202,17 @@ open external class PathFollower : Sprite, Phaser.GameObjects.Components.PathFol
     override var tintFill: Boolean
     override fun clearTint(): PathFollower /* this */
     override fun setTint(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): PathFollower /* this */
 
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): PathFollower /* this */
 
     override var tint: Number
@@ -5741,17 +5802,17 @@ open external class RenderTexture(
     override var tintFill: Boolean
     override fun clearTint(): RenderTexture /* this */
     override fun setTint(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): RenderTexture /* this */
 
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): RenderTexture /* this */
 
     override var tint: Number
@@ -8484,12 +8545,18 @@ open external class Sprite : GameObject, Alpha, BlendMode, Depth, Flip, FX, GetB
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Sprite /* this */
-    override fun setTint(topLeft: Number, topRight: Number, bottomLeft: Number, bottomRight: Number): Sprite /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Sprite /* this */
+
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): Sprite /* this */
 
     override var tint: Number
@@ -8768,12 +8835,18 @@ open external class Text : GameObject, Alpha, BlendMode, ComputedSize, Crop, Dep
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Text /* this */
-    override fun setTint(topLeft: Number, topRight: Number, bottomLeft: Number, bottomRight: Number): Text /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Text /* this */
+
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): Text /* this */
 
     override var tint: Number
@@ -9103,17 +9176,17 @@ open external class TileSprite : GameObject, Alpha, BlendMode, ComputedSize, Cro
     override var tintFill: Boolean
     override fun clearTint(): TileSprite /* this */
     override fun setTint(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): TileSprite /* this */
 
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): TileSprite /* this */
 
     override var tint: Number
@@ -9405,12 +9478,18 @@ open external class Video(scene: Scene, x: Number, y: Number, key: String = defi
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Video /* this */
-    override fun setTint(topLeft: Number, topRight: Number, bottomLeft: Number, bottomRight: Number): Video /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Video /* this */
+
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): Video /* this */
 
     override var tint: Number

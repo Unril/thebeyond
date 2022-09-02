@@ -219,12 +219,12 @@ open external class Image : Phaser.GameObjects.Image, Acceleration, Angular, Bou
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Image /* this */
-    override fun setTint(topLeft: Number, topRight: Number, bottomLeft: Number, bottomRight: Number): Image /* this */
+    override fun setTint(topLeft: Number?, topRight: Number?, bottomLeft: Number?, bottomRight: Number?): Image /* this */
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): Image /* this */
 
     override var tint: Number
@@ -1315,12 +1315,12 @@ open external class Sprite : Phaser.GameObjects.Sprite, Acceleration, Angular, B
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Sprite /* this */
-    override fun setTint(topLeft: Number, topRight: Number, bottomLeft: Number, bottomRight: Number): Sprite /* this */
+    override fun setTint(topLeft: Number?, topRight: Number?, bottomLeft: Number?, bottomRight: Number?): Sprite /* this */
     override fun setTintFill(
-        topLeft: Number,
-        topRight: Number,
-        bottomLeft: Number,
-        bottomRight: Number
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
     ): Sprite /* this */
 
     override var tint: Number

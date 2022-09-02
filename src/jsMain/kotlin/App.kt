@@ -105,7 +105,7 @@ val AppRoutes = FC<Props> {
                 path = Paths.GAME
                 element = RequireAuth.create {
                     authenticated = token.isNotEmpty()
-                    Game {}
+                    GameBox {}
                 }
             }
             Route {

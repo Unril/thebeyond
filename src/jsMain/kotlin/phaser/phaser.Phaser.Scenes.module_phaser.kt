@@ -277,7 +277,8 @@ open external class ScenePlugin(scene: Scene) {
      * @param data A data object that will be passed to the Scene and emitted in it's ready, wake, or resume events.
      */
     open fun run(key: String, data: dynamic = definedExternally): ScenePlugin /* this */
-    open fun run(key: Scene?, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun run(key: Scene, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun run(): ScenePlugin /* this */
 
     /**
      * Pause the Scene - this stops the update step from happening, but it still renders.
@@ -287,7 +288,8 @@ open external class ScenePlugin(scene: Scene) {
      * @param data An optional data object that will be passed to the Scene and emitted in its pause event.
      */
     open fun pause(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
-    open fun pause(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun pause(key: Scene = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun pause(): ScenePlugin /* this */
 
     /**
      * Resume the Scene - starts the update loop again.
@@ -297,7 +299,8 @@ open external class ScenePlugin(scene: Scene) {
      * @param data An optional data object that will be passed to the Scene and emitted in its resume event.
      */
     open fun resume(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
-    open fun resume(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun resume(key: Scene = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun resume(): ScenePlugin /* this */
 
     /**
      * Makes the Scene sleep (no update, no render) but doesn't shutdown.
@@ -307,7 +310,8 @@ open external class ScenePlugin(scene: Scene) {
      * @param data An optional data object that will be passed to the Scene and emitted in its sleep event.
      */
     open fun sleep(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
-    open fun sleep(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun sleep(key: Scene = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun sleep(): ScenePlugin /* this */
 
     /**
      * Makes the Scene wake-up (starts update and render)
@@ -317,7 +321,8 @@ open external class ScenePlugin(scene: Scene) {
      * @param data An optional data object that will be passed to the Scene and emitted in its wake event.
      */
     open fun wake(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
-    open fun wake(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun wake(key: Scene = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun wake(): ScenePlugin /* this */
 
     /**
      * Makes this Scene sleep then starts the Scene given.
@@ -336,7 +341,8 @@ open external class ScenePlugin(scene: Scene) {
      * @param data Optional data object to pass to Scene.Systems.shutdown.
      */
     open fun stop(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
-    open fun stop(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun stop(key: Scene = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun stop(): ScenePlugin /* this */
 
     open fun setActive(
         value: Boolean,
