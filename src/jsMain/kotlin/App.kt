@@ -1,5 +1,6 @@
 import common.*
 import components.*
+import constants.Paths
 import csstype.px
 import kotlinx.js.jso
 import mui.material.Box
@@ -45,7 +46,7 @@ val RequireAuth = FC<RequireAuthProps> { props ->
         +props.children
     } else {
         Navigate {
-            to = PATH_LOGIN
+            to = Paths.LOGIN
             replace = true
         }
     }
@@ -60,7 +61,7 @@ val AppRoutes = FC<Props> {
 
     Routes {
         Route {
-            path = PATH_HOME
+            path = Paths.HOME
             element = Box.create {
                 Header {
                     authenticated = token.isNotEmpty()
@@ -75,25 +76,25 @@ val AppRoutes = FC<Props> {
                     element = Home.create()
                 }
                 Route {
-                    path = PATH_LOGIN
+                    path = Paths.LOGIN
                     element = Login.create {
                         onSubmit = {
                             setToken("token")
-                            navigate.replace(PATH_HOME)
+                            navigate.replace(Paths.HOME)
                         }
                     }
                 }
                 Route {
-                    path = PATH_REGISTER
+                    path = Paths.REGISTER
                     element = Register.create {
                         onSubmit = {
                             setToken("token")
-                            navigate.replace(PATH_HOME)
+                            navigate.replace(Paths.HOME)
                         }
                     }
                 }
                 Route {
-                    path = PATH_CONFIGURATION
+                    path = Paths.CONFIGURATION
                     element = RequireAuth.create {
                         authenticated = token.isNotEmpty()
                         Configuration { }
@@ -101,7 +102,7 @@ val AppRoutes = FC<Props> {
                 }
             }
             Route {
-                path = PATH_GAME
+                path = Paths.GAME
                 element = RequireAuth.create {
                     authenticated = token.isNotEmpty()
                     Game {}

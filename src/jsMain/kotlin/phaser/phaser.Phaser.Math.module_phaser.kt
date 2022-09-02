@@ -393,41 +393,40 @@ external fun TransformXY(
 ): dynamic /* Phaser.Math.Vector2? | Phaser.Geom.Point? | Any? */
 
 open external class Vector2 {
-    constructor(x: Number = definedExternally, y: Number = definedExternally)
     constructor()
-    constructor(x: Number = definedExternally)
-    constructor(x: Vector2Like = definedExternally, y: Number = definedExternally)
-    constructor(x: Vector2Like = definedExternally)
+    constructor(x: Number, y: Number)
+    constructor(x: Number)
+    constructor(x: Vector2Like)
 
     open var x: Number
     open var y: Number
     open fun clone(): Vector2
-    open fun copy(src: Vector2Like): Vector2
-    open fun setFromObject(obj: Vector2Like): Vector2
+    open fun copy(src: Vector2): Vector2
+    open fun setFromObject(obj: Vector2): Vector2
     open fun set(x: Number, y: Number = definedExternally): Vector2
     open fun setTo(x: Number, y: Number = definedExternally): Vector2
     open fun setToPolar(azimuth: Number, radius: Number = definedExternally): Vector2
-    open fun equals(v: Vector2Like): Boolean
-    open fun fuzzyEquals(v: Vector2Like, epsilon: Number = definedExternally): Boolean
+    open fun equals(v: Vector2): Boolean
+    open fun fuzzyEquals(v: Vector2, epsilon: Number = definedExternally): Boolean
     open fun angle(): Number
     open fun setAngle(angle: Number): Vector2
-    open fun add(src: Vector2Like): Vector2
-    open fun subtract(src: Vector2Like): Vector2
-    open fun multiply(src: Vector2Like): Vector2
+    open fun add(src: Vector2): Vector2
+    open fun subtract(src: Vector2): Vector2
+    open fun multiply(src: Vector2): Vector2
     open fun scale(value: Number): Vector2
-    open fun divide(src: Vector2Like): Vector2
+    open fun divide(src: Vector2): Vector2
     open fun negate(): Vector2
-    open fun distance(src: Vector2Like): Number
-    open fun distanceSq(src: Vector2Like): Number
+    open fun distance(src: Vector2): Number
+    open fun distanceSq(src: Vector2): Number
     open fun length(): Number
     open fun setLength(length: Number): Vector2
     open fun lengthSq(): Number
     open fun normalize(): Vector2
     open fun normalizeRightHand(): Vector2
     open fun normalizeLeftHand(): Vector2
-    open fun dot(src: Vector2Like): Number
-    open fun cross(src: Vector2Like): Number
-    open fun lerp(src: Vector2Like, t: Number = definedExternally): Vector2
+    open fun dot(src: Vector2): Number
+    open fun cross(src: Vector2): Number
+    open fun lerp(src: Vector2, t: Number = definedExternally): Vector2
     open fun transformMat3(mat: Matrix3): Vector2
     open fun transformMat4(mat: Matrix4): Vector2
     open fun reset(): Vector2

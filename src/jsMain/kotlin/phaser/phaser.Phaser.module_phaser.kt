@@ -158,11 +158,11 @@ external enum class ScaleModes {
  * You can also define the optional methods {@link Phaser.Types.Scenes.SceneInitCallback init()}, {@link Phaser.Types.Scenes.ScenePreloadCallback preload()}, and {@link Phaser.Types.Scenes.SceneCreateCallback create()}.
  */
 open external class Scene {
-    constructor(config: String = definedExternally)
     constructor()
-    constructor(config: SettingsConfig = definedExternally)
+    constructor(key: String)
+    constructor(config: SettingsConfig)
 
-    open var sys: Systems
+    var sys: Systems
     open var game: Game
     open var anims: AnimationManager
     open var cache: CacheManager
@@ -187,6 +187,14 @@ open external class Scene {
     open var scale: ScaleManager
     open var plugins: PluginManager
     open var renderer: dynamic /* Phaser.Renderer.Canvas.CanvasRenderer | Phaser.Renderer.WebGL.WebGLRenderer */
+
+    /**
+     * This method should be overridden by your own Scenes.
+     *
+     * This method is called once per game step while the scene is running.
+     * @param time The current time. Either a High Resolution Timer value if it comes from Request Animation Frame, or Date.now if using SetTimeout.
+     * @param delta The delta time in ms since the last frame. This is a smoothed and capped value based on the FPS rate.
+     */
     open fun update(time: Number, delta: Number)
 
     open fun create()

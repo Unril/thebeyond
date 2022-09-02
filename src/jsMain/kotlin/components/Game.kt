@@ -1,72 +1,27 @@
 package components
 
 import Phaser.Scale.ScaleModes
-import Phaser.Scene
-import csstype.*
-import emotion.react.css
-import kotlinx.browser.document
+import csstype.Color
+import csstype.FlexDirection
+import csstype.Overflow
+import csstype.minus
+import csstype.px
+import csstype.vh
+import game.scenes.StartScene
 import kotlinx.js.jso
 import mui.material.Box
 import mui.system.sx
-import org.w3c.dom.HTMLCanvasElement
 import react.FC
 import react.Props
-import react.dom.html.ReactHTML.canvas
 import react.useEffectOnce
-
-class SimpleScene : Scene() {
-    lateinit var cursors: Phaser.Types.Input.Keyboard.CursorKeys
-    lateinit var player: Phaser.GameObjects.Rectangle
-
-    override fun create() {
-        player = add.rectangle(100, 100, 64, 64, 0xffffff)
-        physics.add.existing(player, false)
-        cursors = input.keyboard.createCursorKeys()
-        val body: Phaser.Physics.Arcade.Body = player.body
-        body.setCollideWorldBounds(true)
-
-        this.scale.on("resize", ::resize, this);
-    }
-
-    override fun update(time: Number, delta: Number) {
-        val body: Phaser.Physics.Arcade.Body = player.body
-        body.setVelocity(0);
-
-        val vel = 500
-        if (cursors.left.isDown) {
-            body.setVelocityX(-vel);
-        } else if (cursors.right.isDown) {
-            body.setVelocityX(vel);
-        }
-
-        if (cursors.up.isDown) {
-            body.setVelocityY(-vel);
-        } else if (cursors.down.isDown) {
-            body.setVelocityY(vel);
-        }
-    }
-
-    fun resize(
-        gameSize: Phaser.Structs.Size,
-        baseSize: Phaser.Structs.Size,
-        displaySize: Phaser.Structs.Size,
-        resolution: Number
-    ) {
-        val width = gameSize.width
-        val height = gameSize.height
-        println("resize $width $height")
-        cameras.resize(width, height)
-        physics.world.setBounds(0, 0, width, height)
-    }
-}
 
 class SimpleGame {
     var game: Phaser.Game
 
     init {
         val config = jso<Phaser.Types.Core.GameConfig> {
-            type = Phaser.AUTO
-            backgroundColor = "#0072bc"
+            type = Phaser.WEBGL
+            backgroundColor = "#000000"
             scale = jso {
                 mode = ScaleModes.RESIZE
                 parent = "game_element"
@@ -76,10 +31,10 @@ class SimpleGame {
             physics = jso {
                 default = "arcade"
                 arcade = jso {
-                    debug = true
+                    debug = false
                 }
             }
-            scene = ::SimpleScene
+            scene = arrayOf(::StartScene)
         }
         game = Phaser.Game(config)
     }

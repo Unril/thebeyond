@@ -183,84 +183,161 @@ open external class ScenePlugin(scene: Scene) {
     open var key: String
     open var manager: SceneManager
     open var transitionProgress: Number
-    open fun start(key: String = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Shutdown this Scene and run the given one.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param key The Scene to start.
+     * @param data The Scene data. If no value is given it will not overwrite any previous data that may exist.
+     */
+    open fun start(key: String, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun start(key: Scene, data: dynamic = definedExternally): ScenePlugin /* this */
     open fun start(): ScenePlugin /* this */
-    open fun start(key: String = definedExternally): ScenePlugin /* this */
-    open fun start(key: Scene = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun start(key: Scene = definedExternally): ScenePlugin /* this */
-    open fun restart(data: Any? = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Restarts this Scene.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param data The Scene data. If no value is given it will not overwrite any previous data that may exist.
+     */
+    open fun restart(data: dynamic = definedExternally): ScenePlugin /* this */
+
+    /**
+     * This will start a transition from the current Scene to the target Scene given.
+     *
+     * The target Scene cannot be the same as the current Scene.
+     *
+     * The transition will last for the duration specified in milliseconds.
+     *
+     * You can have the target Scene moved above or below this one in the display list.
+     *
+     * You can specify an update callback. This callback will be invoked _every frame_ for the duration
+     * of the transition.
+     *
+     * This Scene can either be sent to sleep at the end of the transition, or stopped. The default is to stop.
+     *
+     * There are also 5 transition related events: This scene will emit the event `transitionout` when
+     * the transition begins, which is typically the frame after calling this method.
+     *
+     * The target Scene will emit the event `transitioninit` when that Scene's `init` method is called.
+     * It will then emit the event `transitionstart` when its `create` method is called.
+     * If the Scene was sleeping and has been woken up, it will emit the event `transitionwake` instead of these two,
+     * as the Scenes `init` and `create` methods are not invoked when a Scene wakes up.
+     *
+     * When the duration of the transition has elapsed it will emit the event `transitioncomplete`.
+     * These events are cleared of all listeners when the Scene shuts down, but not if it is sent to sleep.
+     *
+     * It's important to understand that the duration of the transition begins the moment you call this method.
+     * If the Scene you are transitioning to include delayed processes, such as waiting for files to load, the
+     * time still counts down even while that is happening. If the game itself pauses, or something else causes
+     * this Scenes update loop to stop, then the transition will also pause for that duration. There are
+     * checks in place to prevent you accidentally stopping a transitioning Scene but if you've got code to
+     * override this understands that until the target Scene completes it might never be unlocked for input events.
+     * @param config The transition configuration object.
+     */
     open fun transition(config: SceneTransitionConfig): Boolean
+
+    /**
+     * Add the Scene into the Scene Manager and start it if 'autoStart' is true or the Scene config 'active' property is set.
+     * @param key A unique key used to reference the Scene, i.e. `MainMenu` or `Level1`.
+     * @param sceneConfig The config for the Scene
+     * Phaser.Scene | Phaser.Types.Scenes.SettingsConfig | Phaser.Types.Scenes.CreateSceneFromObjectConfig | Function
+     * @param autoStart If `true` the Scene will be started immediately after being added. Default false.
+     * @param data Optional data object. This will be set as `Scene.settings.data` and passed to `Scene.init`, and `Scene.create`.
+     */
     open fun add(
         key: String,
-        sceneConfig: Scene,
-        autoStart: Boolean = definedExternally,
-        data: Any? = definedExternally
+        sceneConfig: dynamic,
+        autoStart: Boolean? = definedExternally,
+        data: dynamic = definedExternally
     ): Scene
 
-    open fun add(key: String, sceneConfig: Scene): Scene
-    open fun add(key: String, sceneConfig: Scene, autoStart: Boolean = definedExternally): Scene
-    open fun add(
-        key: String,
-        sceneConfig: SettingsConfig,
-        autoStart: Boolean = definedExternally,
-        data: Any? = definedExternally
-    ): Scene
+    /**
+     * Launch the given Scene and run it in parallel with this one.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param key The Scene to launch.
+     * @param data The Scene data.
+     */
+    open fun launch(key: String, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun launch(key: Scene, data: dynamic = definedExternally): ScenePlugin /* this */
 
-    open fun add(key: String, sceneConfig: SettingsConfig): Scene
-    open fun add(key: String, sceneConfig: SettingsConfig, autoStart: Boolean = definedExternally): Scene
-    open fun add(
-        key: String,
-        sceneConfig: CreateSceneFromObjectConfig,
-        autoStart: Boolean = definedExternally,
-        data: Any? = definedExternally
-    ): Scene
+    /**
+     * Runs the given Scene, but does not change the state of this Scene.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     *
+     * If the given Scene is paused, it will resume it. If sleeping, it will wake it.
+     * If not running at all, it will be started.
+     *
+     * Use this if you wish to open a modal Scene by calling `pause` on the current
+     * Scene, then `run` on the modal Scene.
+     * @param key The Scene to run.
+     * @param data A data object that will be passed to the Scene and emitted in it's ready, wake, or resume events.
+     */
+    open fun run(key: String, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun run(key: Scene?, data: dynamic = definedExternally): ScenePlugin /* this */
 
-    open fun add(key: String, sceneConfig: CreateSceneFromObjectConfig): Scene
-    open fun add(key: String, sceneConfig: CreateSceneFromObjectConfig, autoStart: Boolean = definedExternally): Scene
-    open fun add(
-        key: String,
-        sceneConfig: Function<*>,
-        autoStart: Boolean = definedExternally,
-        data: Any? = definedExternally
-    ): Scene
+    /**
+     * Pause the Scene - this stops the update step from happening, but it still renders.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param key The Scene to pause.
+     * @param data An optional data object that will be passed to the Scene and emitted in its pause event.
+     */
+    open fun pause(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun pause(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
 
-    open fun add(key: String, sceneConfig: Function<*>): Scene
-    open fun add(key: String, sceneConfig: Function<*>, autoStart: Boolean = definedExternally): Scene
-    open fun launch(key: String, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun launch(key: String): ScenePlugin /* this */
-    open fun launch(key: Scene, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun launch(key: Scene): ScenePlugin /* this */
-    open fun run(key: String, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun run(key: String): ScenePlugin /* this */
-    open fun run(key: Scene, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun run(key: Scene): ScenePlugin /* this */
-    open fun pause(key: String = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun pause(): ScenePlugin /* this */
-    open fun pause(key: String = definedExternally): ScenePlugin /* this */
-    open fun pause(key: Scene = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun pause(key: Scene = definedExternally): ScenePlugin /* this */
-    open fun resume(key: String = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun resume(): ScenePlugin /* this */
-    open fun resume(key: String = definedExternally): ScenePlugin /* this */
-    open fun resume(key: Scene = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun resume(key: Scene = definedExternally): ScenePlugin /* this */
-    open fun sleep(key: String = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun sleep(): ScenePlugin /* this */
-    open fun sleep(key: String = definedExternally): ScenePlugin /* this */
-    open fun sleep(key: Scene = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun sleep(key: Scene = definedExternally): ScenePlugin /* this */
-    open fun wake(key: String = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun wake(): ScenePlugin /* this */
-    open fun wake(key: String = definedExternally): ScenePlugin /* this */
-    open fun wake(key: Scene = definedExternally, data: Any? = definedExternally): ScenePlugin /* this */
-    open fun wake(key: Scene = definedExternally): ScenePlugin /* this */
+    /**
+     * Resume the Scene - starts the update loop again.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param key The Scene to resume.
+     * @param data An optional data object that will be passed to the Scene and emitted in its resume event.
+     */
+    open fun resume(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun resume(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Makes the Scene sleep (no update, no render) but doesn't shutdown.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param key The Scene to put to sleep.
+     * @param data An optional data object that will be passed to the Scene and emitted in its sleep event.
+     */
+    open fun sleep(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun sleep(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Makes the Scene wake-up (starts update and render)
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param key The Scene to wake up.
+     * @param data An optional data object that will be passed to the Scene and emitted in its wake event.
+     */
+    open fun wake(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun wake(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Makes this Scene sleep then starts the Scene given.
+     *
+     * This will happen at the next Scene Manager update, not immediately.
+     * @param key The Scene to start.
+     */
     open fun switch(key: String): ScenePlugin /* this */
     open fun switch(key: Scene): ScenePlugin /* this */
-    open fun stop(key: String = definedExternally, data: Any = definedExternally): ScenePlugin /* this */
-    open fun stop(): ScenePlugin /* this */
-    open fun stop(key: String = definedExternally): ScenePlugin /* this */
-    open fun stop(key: Scene = definedExternally, data: Any = definedExternally): ScenePlugin /* this */
-    open fun stop(key: Scene = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Shutdown the Scene, clearing display list, timers, etc.
+     *
+     * This happens at the next Scene Manager update, not immediately.
+     * @param key The Scene to stop.
+     * @param data Optional data object to pass to Scene.Systems.shutdown.
+     */
+    open fun stop(key: String = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+    open fun stop(key: Scene? = definedExternally, data: dynamic = definedExternally): ScenePlugin /* this */
+
     open fun setActive(
         value: Boolean,
         key: String = definedExternally,
@@ -309,9 +386,20 @@ open external class ScenePlugin(scene: Scene) {
     open fun moveBelow(keyA: Scene, keyB: String = definedExternally): ScenePlugin /* this */
     open fun moveBelow(keyA: Scene): ScenePlugin /* this */
     open fun moveBelow(keyA: Scene, keyB: Scene = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Removes a Scene from the SceneManager.
+     *
+     * The Scene is removed from the local scenes array, it's key is cleared from the keys
+     * cache and Scene.Systems.destroy is then called on it.
+     *
+     * If the SceneManager is processing the Scenes when this method is called it will
+     * queue the operation for the next update sequence.
+     * @param key The Scene to be removed.
+     */
     open fun remove(key: String = definedExternally): ScenePlugin /* this */
-    open fun remove(): ScenePlugin /* this */
     open fun remove(key: Scene = definedExternally): ScenePlugin /* this */
+
     open fun moveUp(key: String = definedExternally): ScenePlugin /* this */
     open fun moveUp(): ScenePlugin /* this */
     open fun moveUp(key: Scene = definedExternally): ScenePlugin /* this */
@@ -324,12 +412,26 @@ open external class ScenePlugin(scene: Scene) {
     open fun sendToBack(key: String = definedExternally): ScenePlugin /* this */
     open fun sendToBack(): ScenePlugin /* this */
     open fun sendToBack(key: Scene = definedExternally): ScenePlugin /* this */
+
+    /**
+     * Retrieve a Scene.
+     * @param key The Scene to retrieve.
+     */
     open fun get(key: String): Scene
     open fun get(key: Scene): Scene
+
+    /**
+     * Return the status of the Scene.
+     * @param key The Scene to get the status from.
+     */
     open fun getStatus(key: String): Number
     open fun getStatus(key: Scene): Number
+
+    /**
+     * Retrieves the numeric index of a Scene in the Scenes list.
+     * @param key The Scene to get the index of.
+     */
     open fun getIndex(key: String = definedExternally): Number
-    open fun getIndex(): Number
     open fun getIndex(key: Scene = definedExternally): Number
 }
 

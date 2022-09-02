@@ -1,7 +1,7 @@
 package components
 
-import common.PATH_REGISTER
 import common.formData
+import constants.Paths
 import csstype.*
 import entities.User
 import mui.material.*
@@ -86,7 +86,7 @@ val Login = FC<LoginProps> { props ->
                 +"Login"
             }
             AlternativeSignLink {
-                to = PATH_REGISTER
+                to = Paths.REGISTER
                 text = "Don't have an account? Register"
             }
         }

@@ -1,6 +1,7 @@
 package components
 
 import common.*
+import constants.Paths
 import csstype.Display
 import csstype.number
 import csstype.px
@@ -41,7 +42,7 @@ val Header = FC<HeaderProps> { props ->
             }
             Button {
                 component = RouterLink
-                to = PATH_GAME
+                to = Paths.GAME
                 color = ButtonColor.inherit
                 disabled = !props.authenticated
                 sx {
@@ -52,7 +53,7 @@ val Header = FC<HeaderProps> { props ->
             }
             Button {
                 component = RouterLink
-                to = PATH_CONFIGURATION
+                to = Paths.CONFIGURATION
                 color = ButtonColor.inherit
                 disabled = !props.authenticated
                 sx {
@@ -76,13 +77,13 @@ val Header = FC<HeaderProps> { props ->
             } else {
                 Button {
                     component = RouterLink
-                    to = PATH_REGISTER
+                    to = Paths.REGISTER
                     color = ButtonColor.inherit
                     +"Register"
                 }
                 Button {
                     component = RouterLink
-                    to = PATH_LOGIN
+                    to = Paths.LOGIN
                     color = ButtonColor.inherit
                     +"Login"
                 }

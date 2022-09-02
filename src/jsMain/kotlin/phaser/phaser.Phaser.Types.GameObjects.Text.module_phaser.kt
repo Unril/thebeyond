@@ -80,66 +80,149 @@ external interface TextShadow {
 }
 
 external interface TextStyle {
+    /**
+     * The font the Text object will render with. This is a Canvas style font string.
+     */
     var fontFamily: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The font size, as a CSS size string.
+     */
     var fontSize: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Any addition font styles, such as 'strong'.
+     */
     var fontStyle: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The font family or font settings to set. Overrides the other font settings.
+     */
     var font: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * A solid fill color that is rendered behind the Text object. Given as a CSS string color such as `#ff0`.
+     */
     var backgroundColor: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The color the Text is drawn in. Given as a CSS string color such as `#fff` or `rgb()`.
+     */
     var color: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The color used to stroke the Text if the `strokeThickness` property is greater than zero.
+     */
     var stroke: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The thickness of the stroke around the Text. Set to zero for no stroke.
+     */
     var strokeThickness: Number?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The Text shadow configuration object.
+     */
     var shadow: TextShadow?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * A Text Padding object.
+     */
     var padding: TextPadding?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The alignment of the Text. This only impacts multi-line text. Either `left`, `right`, `center` or `justify`.
+     */
     var align: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The maximum number of lines to display within the Text object.
+     */
     var maxLines: Number?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Force the Text object to have the exact width specified in this property. Leave as zero for it to change accordingly to content.
+     */
     var fixedWidth: Number?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Force the Text object to have the exact height specified in this property. Leave as zero for it to change accordingly to content.
+     */
     var fixedHeight: Number?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Sets the resolution (DPI setting) of the Text object. Leave at zero for it to use the game resolution.
+     */
     var resolution: Number?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * Set to `true` if this Text object should render from right-to-left.
+     */
     var rtl: Boolean?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * This is the string used to aid Canvas in calculating the height of the font.
+     */
     var testString: String?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The amount of horizontal padding added to the width of the text when calculating the font metrics.
+     */
     var baselineX: Number?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The amount of vertical padding added to the height of the text when calculating the font metrics.
+     */
     var baselineY: Number?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * The Text Word wrap configuration object.
+     */
     var wordWrap: TextWordWrap?
         get() = definedExternally
         set(value) = definedExternally
+
+    /**
+     * A Text Metrics object. Use this to avoid expensive font size calculations in text heavy games.
+     */
     var metrics: TextMetrics?
         get() = definedExternally
         set(value) = definedExternally

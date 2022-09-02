@@ -2,7 +2,6 @@
 
 ## Description
 
-
 ## Libraries
 
 ## Links
@@ -15,3 +14,13 @@
 * https://beta.dreamstudio.ai/dream
 * [MelonJS open source HTML5 game engine](https://melonjs.org/)
 * [TexturePacker](https://www.codeandweb.com/texturepacker/tutorials)
+* http://free-tex-packer.com/
+* https://renderhjs.net/shoebox/
+* https://krita.org/en/
+* https://opengameart.org/
+
+Bitmap font generator https://snowb.org/
+
+```
+0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!№;%:?*()_+-=.,/|"'@#$^&{}[]~`\абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ
+```

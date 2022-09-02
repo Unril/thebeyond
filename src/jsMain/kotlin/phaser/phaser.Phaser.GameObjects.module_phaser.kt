@@ -306,6 +306,27 @@ open external class DynamicBitmapText : BitmapText {
     override fun setVisible(value: Boolean): DynamicBitmapText /* this */
 }
 
+/**
+ * BitmapText objects work by taking a texture file and an XML or JSON file that describes the font structure.
+ *
+ * During rendering for each letter of the text is rendered to the display, proportionally spaced out and aligned to
+ * match the font structure.
+ *
+ * BitmapText objects are less flexible than Text objects, in that they have less features such as shadows, fills and the ability
+ * to use Web Fonts, however you trade this flexibility for rendering speed. You can also create visually compelling BitmapTexts by
+ * processing the font texture in an image editor, applying fills and any other effects required.
+ *
+ * To create multi-line text insert \r, \n or \r\n escape codes into the text string.
+ *
+ * To create a BitmapText data files you need a 3rd party app such as:
+ *
+ * BMFont (Windows, free): {@link http://www.angelcode.com/products/bmfont/|http://www.angelcode.com/products/bmfont/}
+ * Glyph Designer (OS X, commercial): {@link http://www.71squared.com/en/glyphdesigner|http://www.71squared.com/en/glyphdesigner}
+ * Littera (Web-based, free): {@link http://kvazars.com/littera/|http://kvazars.com/littera/}
+ *
+ * For most use cases it is recommended to use XML. If you wish to use JSON, the formatting should be equal to the result of
+ * converting a valid XML file through the popular X2JS library. An online tool for conversion can be found here: {@link http://codebeautify.org/xmltojson|http://codebeautify.org/xmltojson}
+ */
 open external class BitmapText : GameObject, Alpha, BlendMode, Depth, Mask, Origin, Pipeline, ScrollFactor,
     _Phaser_GameObjects_Components_Texture, Tint, Transform, Visible {
     constructor(
@@ -1851,734 +1872,369 @@ open external class GameObjectCreator(scene: Scene) {
     }
 }
 
+/**
+ * The Game Object Factory is a Scene plugin that allows you to quickly create many common
+ * types of Game Objects and have them automatically registered with the Scene.
+ *
+ * Game Objects directly register themselves with the Factory and inject their own creation
+ * methods into the class.
+ */
 open external class GameObjectFactory(scene: Scene) {
+    /**
+     * Creates a new Path Object.
+     * @param x The horizontal position of this Path.
+     * @param y The vertical position of this Path.
+     */
     open fun path(x: Number, y: Number): Path
+
+    /**
+     * Creates a new Dynamic Bitmap Text Game Object and adds it to the Scene.
+     *
+     * BitmapText objects work by taking a texture file and an XML or JSON file that describes the font structure.
+     *
+     * During rendering for each letter of the text is rendered to the display, proportionally spaced out and aligned to
+     * match the font structure.
+     *
+     * Dynamic Bitmap Text objects are different from Static Bitmap Text in that they invoke a callback for each
+     * letter being rendered during the render pass. This callback allows you to manipulate the properties of
+     * each letter being rendered, such as its position, scale or tint, allowing you to create interesting effects
+     * like jiggling text, which can't be done with Static text. This means that Dynamic Text takes more processing
+     * time, so only use them if you require the callback ability they have.
+     *
+     * BitmapText objects are less flexible than Text objects, in that they have less features such as shadows, fills and the ability
+     * to use Web Fonts, however you trade this flexibility for rendering speed. You can also create visually compelling BitmapTexts by
+     * processing the font texture in an image editor, applying fills and any other effects required.
+     *
+     * To create multi-line text insert \r, \n or \r\n escape codes into the text string.
+     *
+     * To create a BitmapText data files you need a 3rd party app such as:
+     *
+     * BMFont (Windows, free): http://www.angelcode.com/products/bmfont/
+     * Glyph Designer (OS X, commercial): http://www.71squared.com/en/glyphdesigner
+     * Littera (Web-based, free): http://kvazars.com/littera/
+     *
+     * For most use cases it is recommended to use XML. If you wish to use JSON, the formatting should be equal to the result of
+     * converting a valid XML file through the popular X2JS library. An online tool for conversion can be found here: http://codebeautify.org/xmltojson
+     *
+     * Note: This method will only be available if the Dynamic Bitmap Text Game Object has been built into Phaser.
+     * @param x The x position of the Game Object.
+     * @param y The y position of the Game Object.
+     * @param font The key of the font to use from the BitmapFont cache.
+     * @param text The string, or array of strings, to be set as the content of this Bitmap Text.
+     * @param size The font size to set.
+     */
     open fun dynamicBitmapText(
         x: Number,
         y: Number,
         font: String,
-        text: String = definedExternally,
-        size: Number = definedExternally
-    ): DynamicBitmapText
-
-    open fun dynamicBitmapText(x: Number, y: Number, font: String): DynamicBitmapText
-    open fun dynamicBitmapText(x: Number, y: Number, font: String, text: String = definedExternally): DynamicBitmapText
-    open fun dynamicBitmapText(
-        x: Number,
-        y: Number,
-        font: String,
-        text: Array<String> = definedExternally,
-        size: Number = definedExternally
+        text: String? = definedExternally,
+        size: Number? = definedExternally
     ): DynamicBitmapText
 
     open fun dynamicBitmapText(
         x: Number,
         y: Number,
         font: String,
-        text: Array<String> = definedExternally
+        text: Array<String>? = definedExternally,
+        size: Number? = definedExternally
     ): DynamicBitmapText
 
+    /**
+     * Creates a new Bitmap Text Game Object and adds it to the Scene.
+     *
+     * BitmapText objects work by taking a texture file and an XML or JSON file that describes the font structure.
+     *
+     * During rendering for each letter of the text is rendered to the display, proportionally spaced out and aligned to
+     * match the font structure.
+     *
+     * BitmapText objects are less flexible than Text objects, in that they have less features such as shadows, fills and the ability
+     * to use Web Fonts, however you trade this flexibility for rendering speed. You can also create visually compelling BitmapTexts by
+     * processing the font texture in an image editor, applying fills and any other effects required.
+     *
+     * To create multi-line text insert \r, \n or \r\n escape codes into the text string.
+     *
+     * To create a BitmapText data files you need a 3rd party app such as:
+     *
+     * BMFont (Windows, free): http://www.angelcode.com/products/bmfont/
+     * Glyph Designer (OS X, commercial): http://www.71squared.com/en/glyphdesigner
+     * Littera (Web-based, free): http://kvazars.com/littera/
+     *
+     * For most use cases it is recommended to use XML. If you wish to use JSON, the formatting should be equal to the result of
+     * converting a valid XML file through the popular X2JS library. An online tool for conversion can be found here: http://codebeautify.org/xmltojson
+     *
+     * Note: This method will only be available if the Bitmap Text Game Object has been built into Phaser.
+     * @param x The x position of the Game Object.
+     * @param y The y position of the Game Object.
+     * @param font The key of the font to use from the BitmapFont cache.
+     * @param text The string, or array of strings, to be set as the content of this Bitmap Text.
+     * @param size The font size to set.
+     * @param align The alignment of the text in a multi-line BitmapText object. Default 0.
+     */
     open fun bitmapText(
         x: Number,
         y: Number,
         font: String,
-        text: String = definedExternally,
-        size: Number = definedExternally,
-        align: Number = definedExternally
-    ): BitmapText
-
-    open fun bitmapText(x: Number, y: Number, font: String): BitmapText
-    open fun bitmapText(x: Number, y: Number, font: String, text: String = definedExternally): BitmapText
-    open fun bitmapText(
-        x: Number,
-        y: Number,
-        font: String,
-        text: String = definedExternally,
-        size: Number = definedExternally
+        text: String? = definedExternally,
+        size: Number? = definedExternally,
+        align: Number? = definedExternally
     ): BitmapText
 
     open fun bitmapText(
         x: Number,
         y: Number,
         font: String,
-        text: Array<String> = definedExternally,
-        size: Number = definedExternally,
-        align: Number = definedExternally
+        text: Array<String>? = definedExternally,
+        size: Number? = definedExternally,
+        align: Number? = definedExternally
     ): BitmapText
 
-    open fun bitmapText(x: Number, y: Number, font: String, text: Array<String> = definedExternally): BitmapText
-    open fun bitmapText(
-        x: Number,
-        y: Number,
-        font: String,
-        text: Array<String> = definedExternally,
-        size: Number = definedExternally
-    ): BitmapText
+    /**
+     * Creates a new Blitter Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Blitter Game Object has been built into Phaser.
+     * @param x The x position of the Game Object.
+     * @param y The y position of the Game Object.
+     * @param key The key of the Texture the Blitter object will use.
+     * @param frame The default Frame children of the Blitter will use.
+     */
+    open fun blitter(x: Number, y: Number, key: String, frame: String? = definedExternally): Blitter
 
-    open fun blitter(x: Number, y: Number, key: String, frame: String = definedExternally): Blitter
-    open fun blitter(x: Number, y: Number, key: String): Blitter
-    open fun blitter(x: Number, y: Number, key: String, frame: Number = definedExternally): Blitter
+    open fun blitter(x: Number, y: Number, key: String, frame: Number? = definedExternally): Blitter
+
+    /**
+     * Creates a new Container Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Container Game Object has been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world. Default 0.
+     * @param y The vertical position of this Game Object in the world. Default 0.
+     * @param children An optional array of Game Objects to add to this Container.
+     */
     open fun container(
         x: Number = definedExternally,
         y: Number = definedExternally,
         children: GameObject = definedExternally
     ): Container
 
-    open fun container(): Container
-    open fun container(x: Number = definedExternally): Container
-    open fun container(x: Number = definedExternally, y: Number = definedExternally): Container
     open fun container(
         x: Number = definedExternally,
         y: Number = definedExternally,
         children: Array<GameObject> = definedExternally
     ): Container
 
+    /**
+     * DOM Element Game Objects are a way to control and manipulate HTML Elements over the top of your game.
+     *
+     * In order for DOM Elements to display you have to enable them by adding the following to your game
+     * configuration object:
+     *
+     * ```javascript
+     * dom {
+     *   createContainer: true
+     * }
+     * ```
+     *
+     * When this is added, Phaser will automatically create a DOM Container div that is positioned over the top
+     * of the game canvas. This div is sized to match the canvas, and if the canvas size changes, as a result of
+     * settings within the Scale Manager, the dom container is resized accordingly.
+     *
+     * You can create a DOM Element by either passing in DOMStrings, or by passing in a reference to an existing
+     * Element that you wish to be placed under the control of Phaser. For example:
+     *
+     * ```javascript
+     * this.add.dom(x, y, 'div', 'background-color: lime; width: 220px; height: 100px; font: 48px Arial', 'Phaser');
+     * ```
+     *
+     * The above code will insert a div element into the DOM Container at the given x/y coordinate. The DOMString in
+     * the 4th argument sets the initial CSS style of the div and the final argument is the inner text. In this case,
+     * it will create a lime colored div that is 220px by 100px in size with the text Phaser in it, in an Arial font.
+     *
+     * You should nearly always, without exception, use explicitly sized HTML Elements, in order to fully control
+     * alignment and positioning of the elements next to regular game content.
+     *
+     * Rather than specify the CSS and HTML directly you can use the `load.html` File Loader to load it into the
+     * cache and then use the `createFromCache` method instead. You can also use `createFromHTML` and various other
+     * methods available in this class to help construct your elements.
+     *
+     * Once the element has been created you can then control it like you would any other Game Object. You can set its
+     * position, scale, rotation, alpha and other properties. It will move as the main Scene Camera moves and be clipped
+     * at the edge of the canvas. It's important to remember some limitations of DOM Elements: The obvious one is that
+     * they appear above or below your game canvas. You cannot blend them into the display list, meaning you cannot have
+     * a DOM Element, then a Sprite, then another DOM Element behind it.
+     *
+     * They also cannot be enabled for input. To do that, you have to use the `addListener` method to add native event
+     * listeners directly. The final limitation is to do with cameras. The DOM Container is sized to match the game canvas
+     * entirely and clipped accordingly. DOM Elements respect camera scrolling and scrollFactor settings, but if you
+     * change the size of the camera so it no longer matches the size of the canvas, they won't be clipped accordingly.
+     *
+     * Also, all DOM Elements are inserted into the same DOM Container, regardless of which Scene they are created in.
+     *
+     * DOM Elements are a powerful way to align native HTML with your Phaser Game Objects. For example, you can insert
+     * a login form for a multiplayer game directly into your title screen. Or a text input box for a highscore table.
+     * Or a banner ad from a 3rd party service. Or perhaps you'd like to use them for high resolution text display and
+     * UI. The choice is up to you, just remember that you're dealing with standard HTML and CSS floating over the top
+     * of your game, and should treat it accordingly.
+     *
+     * Note: This method will only be available if the DOM Element Game Object has been built into Phaser.
+     * @param x The horizontal position of this DOM Element in the world.
+     * @param y The vertical position of this DOM Element in the world.
+     * @param element An existing DOM element, or a string. If a string starting with a # it will do a `getElementById` look-up on the string (minus the hash). Without a hash, it represents the type of element to create, i.e. 'div'.
+     * @param style If a string, will be set directly as the elements `style` property value. If a plain object, will be iterated and the values transferred. In both cases the values replacing whatever CSS styles may have been previously set.
+     * string | any
+     * @param innerText If given, will be set directly as the elements `innerText` property value, replacing whatever was there before.
+     */
     open fun dom(
         x: Number,
         y: Number,
-        element: HTMLElement = definedExternally,
-        style: String = definedExternally,
-        innerText: String = definedExternally
+        element: HTMLElement? = definedExternally,
+        style: dynamic = definedExternally,
+        innerText: String? = definedExternally
     ): DOMElement
 
-    open fun dom(x: Number, y: Number): DOMElement
-    open fun dom(x: Number, y: Number, element: HTMLElement = definedExternally): DOMElement
     open fun dom(
         x: Number,
         y: Number,
-        element: HTMLElement = definedExternally,
-        style: String = definedExternally
-    ): DOMElement
-
-    open fun dom(
-        x: Number,
-        y: Number,
-        element: HTMLElement = definedExternally,
+        element: String = definedExternally,
         style: Any = definedExternally,
         innerText: String = definedExternally
     ): DOMElement
 
-    open fun dom(
-        x: Number,
-        y: Number,
-        element: HTMLElement = definedExternally,
-        style: Any = definedExternally
-    ): DOMElement
-
-    open fun dom(
-        x: Number,
-        y: Number,
-        element: String = definedExternally,
-        style: String = definedExternally,
-        innerText: String = definedExternally
-    ): DOMElement
-
-    open fun dom(x: Number, y: Number, element: String = definedExternally): DOMElement
-    open fun dom(
-        x: Number,
-        y: Number,
-        element: String = definedExternally,
-        style: String = definedExternally
-    ): DOMElement
-
-    open fun dom(
-        x: Number,
-        y: Number,
-        element: String = definedExternally,
-        style: Any = definedExternally,
-        innerText: String = definedExternally
-    ): DOMElement
-
-    open fun dom(x: Number, y: Number, element: String = definedExternally, style: Any = definedExternally): DOMElement
+    /**
+     * Creates a new Extern Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Extern Game Object has been built into Phaser.
+     */
     open fun extern(): Extern
-    open var scene: Scene
-    open var systems: Systems
-    open var events: EventEmitter
-    open var displayList: DisplayList
-    open var updateList: UpdateList
+
+    protected var scene: Scene
+    protected var systems: Systems
+    protected var events: EventEmitter
+    protected var displayList: DisplayList
+    protected var updateList: UpdateList
+
+    /**
+     * Adds an existing Game Object to this Scene.
+     *
+     * If the Game Object renders, it will be added to the Display List.
+     * If it has a `preUpdate` method, it will be added to the Update List.
+     * @param child The child to be added to this Scene.
+     * Phaser.GameObjects.GameObject|Phaser.GameObjects.Group|Phaser.GameObjects.Layer
+     */
     open fun <G> existing(child: G): G
+
+    /**
+     * Creates a new Graphics Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Graphics Game Object has been built into Phaser.
+     * @param config The Graphics configuration.
+     */
     open fun graphics(config: Styles /* Phaser.Types.GameObjects.Graphics.Styles & `T$6` */ = definedExternally): Graphics
-    open fun group(children: Array<GameObject> = definedExternally, config: GroupConfig = definedExternally): Group
-    open fun group(): Group
-    open fun group(children: Array<GameObject> = definedExternally): Group
-    open fun group(
-        children: Array<GameObject> = definedExternally,
-        config: GroupCreateConfig = definedExternally
-    ): Group
 
-    open fun group(children: GroupConfig = definedExternally, config: GroupConfig = definedExternally): Group
-    open fun group(children: GroupConfig = definedExternally): Group
-    open fun group(children: GroupConfig = definedExternally, config: GroupCreateConfig = definedExternally): Group
-    open fun group(children: Array<GroupConfig> = definedExternally, config: GroupConfig = definedExternally): Group
-    open fun group(children: Array<GroupConfig> = definedExternally): Group
-    open fun group(
-        children: Array<GroupConfig> = definedExternally,
-        config: GroupCreateConfig = definedExternally
-    ): Group
+    /**
+     * Creates a new Group Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Group Game Object has been built into Phaser.
+     * @param children Game Objects to add to this Group; or the `config` argument.
+     * Phaser.GameObjects.GameObject[] | Phaser.Types.GameObjects.Group.GroupConfig | Phaser.Types.GameObjects.Group.GroupConfig[]
+     * @param config A Group Configuration object.
+     * Phaser.Types.GameObjects.Group.GroupConfig | Phaser.Types.GameObjects.Group.GroupCreateConfig
+     */
+    open fun group(children: dynamic = definedExternally, config: dynamic = definedExternally): Group
 
-    open fun image(x: Number, y: Number, texture: String, frame: String = definedExternally): Image
-    open fun image(x: Number, y: Number, texture: String): Image
-    open fun image(x: Number, y: Number, texture: String, frame: Number = definedExternally): Image
-    open fun image(x: Number, y: Number, texture: Texture, frame: String = definedExternally): Image
-    open fun image(x: Number, y: Number, texture: Texture): Image
-    open fun image(x: Number, y: Number, texture: Texture, frame: Number = definedExternally): Image
+    /**
+     * Creates a new Image Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Image Game Object has been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param texture The key, or instance of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * string | Phaser.Textures.Texture
+     * @param frame An optional frame from the Texture this Game Object is rendering with.
+     * string | number
+     */
+    open fun image(x: Number, y: Number, texture: dynamic, frame: dynamic = definedExternally): Image
+
+    /**
+     * Creates a new Layer Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Layer Game Object has been built into Phaser.
+     * @param children An optional array of Game Objects to add to this Layer.
+     */
     open fun layer(children: GameObject = definedExternally): Layer
-    open fun layer(): Layer
     open fun layer(children: Array<GameObject> = definedExternally): Layer
+
+    /**
+     * Creates a new Mesh Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Mesh Game Object and WebGL support have been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param texture The key, or instance of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * string | Phaser.Textures.Texture
+     * @param frame An optional frame from the Texture this Game Object is rendering with.
+     * string | number
+     * @param vertices The vertices array. Either `xy` pairs, or `xyz` if the `containsZ` parameter is `true`.
+     * @param uvs The UVs pairs array.
+     * @param indicies Optional vertex indicies array. If you don't have one, pass `null` or an empty array.
+     * @param containsZ Does the vertices data include a `z` component? Default false.
+     * @param normals Optional vertex normals array. If you don't have one, pass `null` or an empty array.
+     * @param colors An array of colors, one per vertex, or a single color value applied to all vertices. Default 0xffffff.
+     * number | number[]
+     * @param alphas An array of alpha values, one per vertex, or a single alpha value applied to all vertices. Default 1.
+     * number | number[]
+     */
     open fun mesh(
         x: Number = definedExternally,
         y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
+        texture: dynamic = definedExternally,
+        frame: dynamic = definedExternally,
         vertices: Array<Number> = definedExternally,
         uvs: Array<Number> = definedExternally,
         indicies: Array<Number> = definedExternally,
         containsZ: Boolean = definedExternally,
         normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
+        colors: dynamic = definedExternally,
+        alphas: dynamic = definedExternally
     ): Mesh
 
-    open fun mesh(): Mesh
-    open fun mesh(x: Number = definedExternally): Mesh
-    open fun mesh(x: Number = definedExternally, y: Number = definedExternally): Mesh
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: String = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: String = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Number = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Any /* Number | Array<Number> */ = definedExternally
-    ): Mesh
-
-    open fun mesh(
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        texture: Texture = definedExternally,
-        frame: Number = definedExternally,
-        vertices: Array<Number> = definedExternally,
-        uvs: Array<Number> = definedExternally,
-        indicies: Array<Number> = definedExternally,
-        containsZ: Boolean = definedExternally,
-        normals: Array<Number> = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Mesh
-
+    /**
+     * Creates a new Particle Emitter Manager Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Particles Game Object has been built into Phaser.
+     * @param texture The key, or instance of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * string | Phaser.Textures.Texture
+     * @param frame An optional frame from the Texture this Game Object is rendering with.
+     * string | number | object
+     * @param emitters Configuration settings for one or more emitters to create.
+     */
     open fun particles(
-        texture: String,
-        frame: String? = definedExternally,
-        emitters: ParticleEmitterConfig = definedExternally
+        texture: dynamic,
+        frame: dynamic = definedExternally,
+        emitters: ParticleEmitterConfig? = definedExternally
     ): ParticleEmitterManager
 
-    open fun particles(texture: String): ParticleEmitterManager
-    open fun particles(texture: String, frame: String? = definedExternally): ParticleEmitterManager
     open fun particles(
-        texture: String,
-        frame: String? = definedExternally,
+        texture: dynamic,
+        frame: dynamic = definedExternally,
         emitters: Array<ParticleEmitterConfig> = definedExternally
     ): ParticleEmitterManager
 
-    open fun particles(
-        texture: String,
-        frame: Number? = definedExternally,
-        emitters: ParticleEmitterConfig = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(texture: String, frame: Number? = definedExternally): ParticleEmitterManager
-    open fun particles(
-        texture: String,
-        frame: Number? = definedExternally,
-        emitters: Array<ParticleEmitterConfig> = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(
-        texture: String,
-        frame: Any? = definedExternally,
-        emitters: ParticleEmitterConfig = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(texture: String, frame: Any? = definedExternally): ParticleEmitterManager
-    open fun particles(
-        texture: String,
-        frame: Any? = definedExternally,
-        emitters: Array<ParticleEmitterConfig> = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(
-        texture: Texture,
-        frame: String? = definedExternally,
-        emitters: ParticleEmitterConfig = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(texture: Texture): ParticleEmitterManager
-    open fun particles(texture: Texture, frame: String? = definedExternally): ParticleEmitterManager
-    open fun particles(
-        texture: Texture,
-        frame: String? = definedExternally,
-        emitters: Array<ParticleEmitterConfig> = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(
-        texture: Texture,
-        frame: Number? = definedExternally,
-        emitters: ParticleEmitterConfig = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(texture: Texture, frame: Number? = definedExternally): ParticleEmitterManager
-    open fun particles(
-        texture: Texture,
-        frame: Number? = definedExternally,
-        emitters: Array<ParticleEmitterConfig> = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(
-        texture: Texture,
-        frame: Any? = definedExternally,
-        emitters: ParticleEmitterConfig = definedExternally
-    ): ParticleEmitterManager
-
-    open fun particles(texture: Texture, frame: Any? = definedExternally): ParticleEmitterManager
-    open fun particles(
-        texture: Texture,
-        frame: Any? = definedExternally,
-        emitters: Array<ParticleEmitterConfig> = definedExternally
-    ): ParticleEmitterManager
-
+    /**
+     * Creates a new PathFollower Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the PathFollower Game Object has been built into Phaser.
+     * @param path The Path this PathFollower is connected to.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param texture The key, or instance of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * @param frame An optional frame from the Texture this Game Object is rendering with.
+     * string | number
+     */
     open fun follower(
         path: Path,
         x: Number,
         y: Number,
         texture: String,
-        frame: String = definedExternally
-    ): PathFollower
-
-    open fun follower(path: Path, x: Number, y: Number, texture: String): PathFollower
-    open fun follower(
-        path: Path,
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: Number = definedExternally
+        frame: dynamic = definedExternally
     ): PathFollower
 
     open fun follower(
@@ -2586,18 +2242,44 @@ open external class GameObjectFactory(scene: Scene) {
         x: Number,
         y: Number,
         texture: Texture,
-        frame: String = definedExternally
+        frame: dynamic = definedExternally
     ): PathFollower
 
-    open fun follower(path: Path, x: Number, y: Number, texture: Texture): PathFollower
-    open fun follower(
-        path: Path,
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: Number = definedExternally
-    ): PathFollower
-
+    /**
+     * Creates a new Point Light Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Point Light Game Object has been built into Phaser.
+     *
+     * The Point Light Game Object provides a way to add a point light effect into your game,
+     * without the expensive shader processing requirements of the traditional Light Game Object.
+     *
+     * The difference is that the Point Light renders using a custom shader, designed to give the
+     * impression of a point light source, of variable radius, intensity and color, in your game.
+     * However, unlike the Light Game Object, it does not impact any other Game Objects, or use their
+     * normal maps for calculations. This makes them extremely fast to render compared to Lights
+     * and perfect for special effects, such as flickering torches or muzzle flashes.
+     *
+     * For maximum performance you should batch Point Light Game Objects together. This means
+     * ensuring they follow each other consecutively on the display list. Ideally, use a Layer
+     * Game Object and then add just Point Lights to it, so that it can batch together the rendering
+     * of the lights. You don't _have_ to do this, and if you've only a handful of Point Lights in
+     * your game then it's perfectly safe to mix them into the dislay list as normal. However, if
+     * you're using a large number of them, please consider how they are mixed into the display list.
+     *
+     * The renderer will automatically cull Point Lights. Those with a radius that does not intersect
+     * with the Camera will be skipped in the rendering list. This happens automatically and the
+     * culled state is refreshed every frame, for every camera.
+     *
+     * The origin of a Point Light is always 0.5 and it cannot be changed.
+     *
+     * Point Lights are a WebGL only feature and do not have a Canvas counterpart.
+     * @param x The horizontal position of this Point Light in the world.
+     * @param y The vertical position of this Point Light in the world.
+     * @param color The color of the Point Light, given as a hex value. Default 0xffffff.
+     * @param radius The radius of the Point Light. Default 128.
+     * @param intensity The intensity, or color blend, of the Point Light. Default 1.
+     * @param attenuation The attenuation  of the Point Light. This is the reduction of light from the center point. Default 0.1.
+     */
     open fun pointlight(
         x: Number,
         y: Number,
@@ -2607,6 +2289,19 @@ open external class GameObjectFactory(scene: Scene) {
         attenuation: Number = definedExternally
     ): PointLight
 
+    /**
+     * Creates a new Render Texture Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Render Texture Game Object has been built into Phaser.
+     *
+     * A Render Texture is a special texture that allows any number of Game Objects to be drawn to it. You can take many complex objects and
+     * draw them all to this one texture, which can they be used as the texture for other Game Object's. It's a way to generate dynamic
+     * textures at run-time that are WebGL friendly and don't invoke expensive GPU uploads.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param width The width of the Render Texture. Default 32.
+     * @param height The height of the Render Texture. Default 32.
+     */
     open fun renderTexture(
         x: Number,
         y: Number,
@@ -2614,236 +2309,62 @@ open external class GameObjectFactory(scene: Scene) {
         height: Number = definedExternally
     ): RenderTexture
 
+    /**
+     * Creates a new Rope Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Rope Game Object and WebGL support have been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param texture The key, or instance of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * string | Phaser.Textures.Texture
+     * @param frame An optional frame from the Texture this Game Object is rendering with.
+     * string | number
+     * @param points An array containing the vertices data for this Rope. If none is provided a simple quad is created. See `setPoints` to set this post-creation.
+     * @param horizontal Should the vertices of this Rope be aligned horizontally (`true`), or vertically (`false`)? Default true.
+     * @param colors An optional array containing the color data for this Rope. You should provide one color value per a pair of vertices.
+     * @param alphas An optional array containing the alpha data for this Rope. You should provide one alpha value per a pair of vertices.
+     */
     open fun rope(
         x: Number,
         y: Number,
-        texture: String,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Array<Number> = definedExternally
+        texture: dynamic,
+        frame: dynamic = definedExternally,
+        points: Array<Vector2Like>? = definedExternally,
+        horizontal: Boolean? = definedExternally,
+        colors: Array<Number>? = definedExternally,
+        alphas: Array<Number>? = definedExternally
     ): Rope
 
-    open fun rope(x: Number, y: Number, texture: String): Rope
-    open fun rope(x: Number, y: Number, texture: String, frame: String = definedExternally): Rope
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Array<Number> = definedExternally
-    ): Rope
-
-    open fun rope(x: Number, y: Number, texture: String, frame: Number = definedExternally): Rope
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: String,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Array<Number> = definedExternally
-    ): Rope
-
-    open fun rope(x: Number, y: Number, texture: Texture): Rope
-    open fun rope(x: Number, y: Number, texture: Texture, frame: String = definedExternally): Rope
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: String = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally,
-        alphas: Array<Number> = definedExternally
-    ): Rope
-
-    open fun rope(x: Number, y: Number, texture: Texture, frame: Number = definedExternally): Rope
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally
-    ): Rope
-
-    open fun rope(
-        x: Number,
-        y: Number,
-        texture: Texture,
-        frame: Number = definedExternally,
-        points: Array<Vector2Like> = definedExternally,
-        horizontal: Boolean = definedExternally,
-        colors: Array<Number> = definedExternally
-    ): Rope
-
+    /**
+     * Creates a new Shader Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Shader Game Object and WebGL support have been built into Phaser.
+     * @param key The key of the shader to use from the shader cache, or a BaseShader instance.
+     * @param x The horizontal position of this Game Object in the world. Default 0.
+     * @param y The vertical position of this Game Object in the world. Default 0.
+     * @param width The width of the Game Object. Default 128.
+     * @param height The height of the Game Object. Default 128.
+     * @param textures Optional array of texture keys to bind to the iChannel0...3 uniforms. The textures must already exist in the Texture Manager.
+     * @param textureData Optional additional texture data.
+     */
     open fun shader(
         key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally,
+        x: Number? = definedExternally,
+        y: Number? = definedExternally,
+        width: Number? = definedExternally,
+        height: Number? = definedExternally,
+        textures: Array<String>? = definedExternally,
         textureData: Any? = definedExternally
     ): Shader
 
-    open fun shader(key: String): Shader
-    open fun shader(key: String, x: Number = definedExternally): Shader
-    open fun shader(key: String, x: Number = definedExternally, y: Number = definedExternally): Shader
-    open fun shader(
-        key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally
-    ): Shader
-
-    open fun shader(
-        key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally
-    ): Shader
-
-    open fun shader(
-        key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally
-    ): Shader
-
     open fun shader(
         key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally,
+        x: Number? = definedExternally,
+        y: Number? = definedExternally,
+        width: Number? = definedExternally,
+        height: Number? = definedExternally,
+        textures: Array<String>? = definedExternally,
         textureData: Any? = definedExternally
-    ): Shader
-
-    open fun shader(key: BaseShader): Shader
-    open fun shader(key: BaseShader, x: Number = definedExternally): Shader
-    open fun shader(key: BaseShader, x: Number = definedExternally, y: Number = definedExternally): Shader
-    open fun shader(
-        key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally
-    ): Shader
-
-    open fun shader(
-        key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally
-    ): Shader
-
-    open fun shader(
-        key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally
     ): Shader
 
     open fun arc(
@@ -2935,6 +2456,26 @@ open external class GameObjectFactory(scene: Scene) {
         fillAlpha: Number = definedExternally
     ): Polygon
 
+    /**
+     * Creates a new Rectangle Shape Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Rectangle Game Object has been built into Phaser.
+     *
+     * The Rectangle Shape is a Game Object that can be added to a Scene, Group or Container. You can
+     * treat it like any other Game Object in your game, such as tweening it, scaling it, or enabling
+     * it for input or physics. It provides a quick and easy way for you to render this shape in your
+     * game without using a texture, while still taking advantage of being fully batched in WebGL.
+     *
+     * This shape supports both fill and stroke colors.
+     *
+     * You can change the size of the rectangle by changing the `width` and `height` properties.
+     * @param x The horizontal position of this Game Object in the world. Default 0.
+     * @param y The vertical position of this Game Object in the world. Default 0.
+     * @param width The width of the rectangle. Default 128.
+     * @param height The height of the rectangle. Default 128.
+     * @param fillColor The color the rectangle will be filled with, i.e. 0xff0000 for red.
+     * @param fillAlpha The alpha the rectangle will be filled with. You can also set the alpha of the overall Shape using its `alpha` property.
+     */
     open fun rectangle(
         x: Number = definedExternally,
         y: Number = definedExternally,
@@ -2944,6 +2485,33 @@ open external class GameObjectFactory(scene: Scene) {
         fillAlpha: Number = definedExternally
     ): Rectangle
 
+    /**
+     * Creates a new Star Shape Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Star Game Object has been built into Phaser.
+     *
+     * The Star Shape is a Game Object that can be added to a Scene, Group or Container. You can
+     * treat it like any other Game Object in your game, such as tweening it, scaling it, or enabling
+     * it for input or physics. It provides a quick and easy way for you to render this shape in your
+     * game without using a texture, while still taking advantage of being fully batched in WebGL.
+     *
+     * This shape supports both fill and stroke colors.
+     *
+     * As the name implies, the Star shape will display a star in your game. You can control several
+     * aspects of it including the number of points that constitute the star. The default is 5. If
+     * you change it to 4 it will render as a diamond. If you increase them, you'll get a more spiky
+     * star shape.
+     *
+     * You can also control the inner and outer radius, which is how 'long' each point of the star is.
+     * Modify these values to create more interesting shapes.
+     * @param x The horizontal position of this Game Object in the world. Default 0.
+     * @param y The vertical position of this Game Object in the world. Default 0.
+     * @param points The number of points on the star. Default 5.
+     * @param innerRadius The inner radius of the star. Default 32.
+     * @param outerRadius The outer radius of the star. Default 64.
+     * @param fillColor The color the star will be filled with, i.e. 0xff0000 for red.
+     * @param fillAlpha The alpha the star will be filled with. You can also set the alpha of the overall Shape using its `alpha` property.
+     */
     open fun star(
         x: Number = definedExternally,
         y: Number = definedExternally,
@@ -2954,6 +2522,32 @@ open external class GameObjectFactory(scene: Scene) {
         fillAlpha: Number = definedExternally
     ): Star
 
+    /**
+     * Creates a new Triangle Shape Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Triangle Game Object has been built into Phaser.
+     *
+     * The Triangle Shape is a Game Object that can be added to a Scene, Group or Container. You can
+     * treat it like any other Game Object in your game, such as tweening it, scaling it, or enabling
+     * it for input or physics. It provides a quick and easy way for you to render this shape in your
+     * game without using a texture, while still taking advantage of being fully batched in WebGL.
+     *
+     * This shape supports both fill and stroke colors.
+     *
+     * The Triangle consists of 3 lines, joining up to form a triangular shape. You can control the
+     * position of each point of these lines. The triangle is always closed and cannot have an open
+     * face. If you require that, consider using a Polygon instead.
+     * @param x The horizontal position of this Game Object in the world. Default 0.
+     * @param y The vertical position of this Game Object in the world. Default 0.
+     * @param x1 The horizontal position of the first point in the triangle. Default 0.
+     * @param y1 The vertical position of the first point in the triangle. Default 128.
+     * @param x2 The horizontal position of the second point in the triangle. Default 64.
+     * @param y2 The vertical position of the second point in the triangle. Default 0.
+     * @param x3 The horizontal position of the third point in the triangle. Default 128.
+     * @param y3 The vertical position of the third point in the triangle. Default 128.
+     * @param fillColor The color the triangle will be filled with, i.e. 0xff0000 for red.
+     * @param fillAlpha The alpha the triangle will be filled with. You can also set the alpha of the overall Shape using its `alpha` property.
+     */
     open fun triangle(
         x: Number = definedExternally,
         y: Number = definedExternally,
@@ -2967,12 +2561,51 @@ open external class GameObjectFactory(scene: Scene) {
         fillAlpha: Number = definedExternally
     ): Triangle
 
-    open fun sprite(x: Number, y: Number, texture: String, frame: String = definedExternally): Sprite
-    open fun sprite(x: Number, y: Number, texture: String): Sprite
-    open fun sprite(x: Number, y: Number, texture: String, frame: Number = definedExternally): Sprite
-    open fun sprite(x: Number, y: Number, texture: Texture, frame: String = definedExternally): Sprite
-    open fun sprite(x: Number, y: Number, texture: Texture): Sprite
-    open fun sprite(x: Number, y: Number, texture: Texture, frame: Number = definedExternally): Sprite
+    /**
+     * Creates a new Sprite Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Sprite Game Object has been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param texture The key, or instance of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * @param frame An optional frame from the Texture this Game Object is rendering with.
+     * string | number
+     */
+    open fun sprite(x: Number, y: Number, texture: String, frame: dynamic = definedExternally): Sprite
+    open fun sprite(x: Number, y: Number, texture: Texture, frame: dynamic = definedExternally): Sprite
+
+    /**
+     * Creates a new Text Game Object and adds it to the Scene.
+     *
+     * A Text Game Object.
+     *
+     * Text objects work by creating their own internal hidden Canvas and then renders text to it using
+     * the standard Canvas `fillText` API. It then creates a texture from this canvas which is rendered
+     * to your game during the render pass.
+     *
+     * Because it uses the Canvas API you can take advantage of all the features this offers, such as
+     * applying gradient fills to the text, or strokes, shadows and more. You can also use custom fonts
+     * loaded externally, such as Google or TypeKit Web fonts.
+     *
+     * You can only display fonts that are currently loaded and available to the browser: therefore fonts must
+     * be pre-loaded. Phaser does not do ths for you, so you will require the use of a 3rd party font loader,
+     * or have the fonts ready available in the CSS on the page in which your Phaser game resides.
+     *
+     * See {@link http://www.jordanm.co.uk/tinytype this compatibility table} for the available default fonts
+     * across mobile browsers.
+     *
+     * A note on performance: Every time the contents of a Text object changes, i.e. changing the text being
+     * displayed, or the style of the text, it needs to remake the Text canvas, and if on WebGL, re-upload the
+     * new texture to the GPU. This can be an expensive operation if used often, or with large quantities of
+     * Text objects in your game. If you run into performance issues you would be better off using Bitmap Text
+     * instead, as it benefits from batching and avoids expensive Canvas API calls.
+     *
+     * Note: This method will only be available if the Text Game Object has been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param text The text this Text object will display.
+     * @param style The Text style configuration object.
+     */
     open fun text(
         x: Number,
         y: Number,
@@ -2980,7 +2613,6 @@ open external class GameObjectFactory(scene: Scene) {
         style: Phaser.Types.GameObjects.Text.TextStyle = definedExternally
     ): Text
 
-    open fun text(x: Number, y: Number, text: String): Text
     open fun text(
         x: Number,
         y: Number,
@@ -2988,24 +2620,25 @@ open external class GameObjectFactory(scene: Scene) {
         style: Phaser.Types.GameObjects.Text.TextStyle = definedExternally
     ): Text
 
-    open fun text(x: Number, y: Number, text: Array<String>): Text
+    /**
+     * Creates a new TileSprite Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the TileSprite Game Object has been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param width The width of the Game Object. If zero it will use the size of the texture frame.
+     * @param height The height of the Game Object. If zero it will use the size of the texture frame.
+     * @param texture The key, or instance of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * @param frame An optional frame from the Texture this Game Object is rendering with.
+     * string | number
+     */
     open fun tileSprite(
         x: Number,
         y: Number,
         width: Number,
         height: Number,
         texture: String,
-        frame: String = definedExternally
-    ): TileSprite
-
-    open fun tileSprite(x: Number, y: Number, width: Number, height: Number, texture: String): TileSprite
-    open fun tileSprite(
-        x: Number,
-        y: Number,
-        width: Number,
-        height: Number,
-        texture: String,
-        frame: Number = definedExternally
+        frame: dynamic = definedExternally
     ): TileSprite
 
     open fun tileSprite(
@@ -3014,21 +2647,53 @@ open external class GameObjectFactory(scene: Scene) {
         width: Number,
         height: Number,
         texture: Texture,
-        frame: String = definedExternally
+        frame: dynamic = definedExternally
     ): TileSprite
 
-    open fun tileSprite(x: Number, y: Number, width: Number, height: Number, texture: Texture): TileSprite
-    open fun tileSprite(
-        x: Number,
-        y: Number,
-        width: Number,
-        height: Number,
-        texture: Texture,
-        frame: Number = definedExternally
-    ): TileSprite
-
+    /**
+     * Creates a new Video Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Video Game Object has been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param key Optional key of the Video this Game Object will play, as stored in the Video Cache.
+     */
     open fun video(x: Number, y: Number, key: String = definedExternally): Video
+
+    /**
+     * Creates a new Zone Game Object and adds it to the Scene.
+     *
+     * Note: This method will only be available if the Zone Game Object has been built into Phaser.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param width The width of the Game Object.
+     * @param height The height of the Game Object.
+     */
     open fun zone(x: Number, y: Number, width: Number, height: Number): Zone
+
+    /**
+     * Creates a Tilemap from the given key or data, or creates a blank Tilemap if no key/data provided.
+     * When loading from CSV or a 2D array, you should specify the tileWidth & tileHeight. When parsing
+     * from a map from Tiled, the tileWidth, tileHeight, width & height will be pulled from the map
+     * data. For an empty map, you should specify tileWidth, tileHeight, width & height.
+     * @param key The key in the Phaser cache that corresponds to the loaded tilemap data.
+     * @param tileWidth The width of a tile in pixels. Pass in `null` to leave as the
+     * default. Default 32.
+     * @param tileHeight The height of a tile in pixels. Pass in `null` to leave as the
+     * default. Default 32.
+     * @param width The width of the map in tiles. Pass in `null` to leave as the
+     * default. Default 10.
+     * @param height The height of the map in tiles. Pass in `null` to leave as the
+     * default. Default 10.
+     * @param data Instead of loading from the cache, you can also load directly from
+     * a 2D array of tile indexes. Pass in `null` for no data.
+     * @param insertNull Controls how empty tiles, tiles with an index of -1, in the
+     * map data are handled. If `true`, empty locations will get a value of `null`. If `false`, empty
+     * location will get a Tile object with an index of -1. If you've a large sparsely populated map and
+     * the tile data doesn't need to change then setting this value to `true` will help with memory
+     * consumption. However, if your map is small, or you need to update the tiles dynamically, then leave
+     * the default value set. Default false.
+     */
     open fun tilemap(
         key: String = definedExternally,
         tileWidth: Number = definedExternally,
@@ -3039,15 +2704,48 @@ open external class GameObjectFactory(scene: Scene) {
         insertNull: Boolean = definedExternally
     ): Tilemap
 
-    open fun tween(config: TweenBuilderConfig?): Tween
-    open fun tween(config: Any?): Tween
+    /**
+     * Creates a new Tween object.
+     *
+     * Note: This method will only be available if Tweens have been built into Phaser.
+     * @param config The Tween configuration.
+     */
+    open fun tween(config: TweenBuilderConfig): Tween
+    open fun tween(config: Any): Tween
 
     companion object {
+        /**
+         * Static method called directly by the Game Object factory functions.
+         * With this method you can register a custom GameObject factory in the GameObjectFactory,
+         * providing a name (`factoryType`) and the constructor (`factoryFunction`) in order
+         * to be called when you call to Phaser.Scene.add[ factoryType ] method.
+         * @param factoryType The key of the factory that you will use to call to Phaser.Scene.add[ factoryType ] method.
+         * @param factoryFunction The constructor function to be called when you invoke to the Phaser.Scene.add method.
+         */
         fun register(factoryType: String, factoryFunction: Function<*>)
+
+        /**
+         * Static method called directly by the Game Object factory functions.
+         * With this method you can remove a custom GameObject factory registered in the GameObjectFactory,
+         * providing a its `factoryType`.
+         * @param factoryType The key of the factory that you want to remove from the GameObjectFactory.
+         */
         fun remove(factoryType: String)
     }
 }
 
+/**
+ * Calculates the Transform Matrix of the given Game Object and Camera, factoring in
+ * the parent matrix if provided.
+ *
+ * Note that the object this results contains _references_ to the Transform Matrices,
+ * not new instances of them. Therefore, you should use their values immediately, or
+ * copy them to your own matrix, as they will be replaced as soon as another Game
+ * Object is rendered.
+ * @param src The Game Object to calculate the transform matrix for.
+ * @param camera The camera being used to render the Game Object.
+ * @param parentMatrix The transform matrix of the parent container, if any.
+ */
 external fun GetCalcMatrix(
     src: GameObject,
     camera: Camera,
@@ -6667,88 +6365,80 @@ open external class Rope : GameObject, AlphaSingle, BlendMode, Depth, Flip, Mask
     override fun setScrollFactor(x: Number, y: Number): Rope /* this */
 }
 
-open external class Shader : GameObject, ComputedSize, Depth, GetBounds, Mask, Origin, ScrollFactor, Transform,
-    Visible {
-    constructor(
-        scene: Scene,
-        key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally,
-        textureData: Any = definedExternally
-    )
+/**
+ * A Shader Game Object.
+ *
+ * This Game Object allows you to easily add a quad with its own shader into the display list, and manipulate it
+ * as you would any other Game Object, including scaling, rotating, positioning and adding to Containers. Shaders
+ * can be masked with either Bitmap or Geometry masks and can also be used as a Bitmap Mask for a Camera or other
+ * Game Object. They can also be made interactive and used for input events.
+ *
+ * It works by taking a reference to a `Phaser.Display.BaseShader` instance, as found in the Shader Cache. These can
+ * be created dynamically at runtime, or loaded in via the GLSL File Loader:
+ *
+ * ```javascript
+ * function preload ()
+ * {
+ *     this.load.glsl('fire', 'shaders/fire.glsl.js');
+ * }
+ *
+ * function create ()
+ * {
+ *     this.add.shader('fire', 400, 300, 512, 512);
+ * }
+ * ```
+ *
+ * Please see the Phaser 3 Examples GitHub repo for examples of loading and creating shaders dynamically.
+ *
+ * Due to the way in which they work, you cannot directly change the alpha or blend mode of a Shader. This should
+ * be handled via exposed uniforms in the shader code itself.
+ *
+ * By default, a Shader will be created with a standard set of uniforms. These were added to match those
+ * found on sites such as ShaderToy or GLSLSandbox, and provide common functionality a shader may need,
+ * such as the timestamp, resolution or pointer position. You can replace them by specifying your own uniforms
+ * in the Base Shader.
+ *
+ * These Shaders work by halting the current pipeline during rendering, creating a viewport matched to the
+ * size of this Game Object and then renders a quad using the bound shader. At the end, the pipeline is restored.
+ *
+ * Because it blocks the pipeline it means it will interrupt any batching that is currently going on, so you should
+ * use these Game Objects sparingly. If you need to have a fully batched custom shader, then please look at using
+ * a custom pipeline instead. However, for background or special masking effects, they are extremely effective.
+ */
+open external class Shader
+    : GameObject, ComputedSize, Depth, GetBounds, Mask, Origin, ScrollFactor, Transform, Visible {
 
-    constructor(scene: Scene, key: String)
-    constructor(scene: Scene, key: String, x: Number = definedExternally)
-    constructor(scene: Scene, key: String, x: Number = definedExternally, y: Number = definedExternally)
+    /**
+     *
+     * @param scene The Scene to which this Game Object belongs. A Game Object can only belong to one Scene at a time.
+     * @param key The key of the shader to use from the shader cache, or a BaseShader instance.
+     * @param x The horizontal position of this Game Object in the world. Default 0.
+     * @param y The vertical position of this Game Object in the world. Default 0.
+     * @param width The width of the Game Object. Default 128.
+     * @param height The height of the Game Object. Default 128.
+     * @param textures Optional array of texture keys to bind to the iChannel0...3 uniforms. The textures must already exist in the Texture Manager.
+     * @param textureData Additional texture data if you want to create shader with none NPOT textures.
+     */
     constructor(
         scene: Scene,
         key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally
-    )
-
-    constructor(
-        scene: Scene,
-        key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally
-    )
-
-    constructor(
-        scene: Scene,
-        key: String,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally
+        x: Number? = definedExternally,
+        y: Number? = definedExternally,
+        width: Number? = definedExternally,
+        height: Number? = definedExternally,
+        textures: Array<String>? = definedExternally,
+        textureData: dynamic = definedExternally
     )
 
     constructor(
         scene: Scene,
         key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally,
-        textureData: Any = definedExternally
-    )
-
-    constructor(scene: Scene, key: BaseShader)
-    constructor(scene: Scene, key: BaseShader, x: Number = definedExternally)
-    constructor(scene: Scene, key: BaseShader, x: Number = definedExternally, y: Number = definedExternally)
-    constructor(
-        scene: Scene,
-        key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally
-    )
-
-    constructor(
-        scene: Scene,
-        key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally
-    )
-
-    constructor(
-        scene: Scene,
-        key: BaseShader,
-        x: Number = definedExternally,
-        y: Number = definedExternally,
-        width: Number = definedExternally,
-        height: Number = definedExternally,
-        textures: Array<String> = definedExternally
+        x: Number? = definedExternally,
+        y: Number? = definedExternally,
+        width: Number? = definedExternally,
+        height: Number? = definedExternally,
+        textures: Array<String>? = definedExternally,
+        textureData: dynamic = definedExternally
     )
 
     open var shader: BaseShader
@@ -6767,6 +6457,7 @@ open external class Shader : GameObject, ComputedSize, Depth, GetBounds, Mask, O
     open var glTexture: WebGLTexture
     open val renderToTexture: Boolean
     open var texture: Texture
+
     override fun willRender(camera: Camera): Boolean
     open fun setRenderToTexture(key: String = definedExternally, flipY: Boolean = definedExternally): Shader /* this */
     open fun setShader(
@@ -6803,8 +6494,33 @@ open external class Shader : GameObject, ComputedSize, Depth, GetBounds, Mask, O
         textureData: Any = definedExternally
     ): Shader /* this */
 
+    /**
+     * Sets a property of a uniform already present on this shader.
+     *
+     * To modify the value of a uniform such as a 1f or 1i use the `value` property directly:
+     *
+     * ```javascript
+     * shader.setUniform('size.value', 16);
+     * ```
+     *
+     * You can use dot notation to access deeper values, for example:
+     *
+     * ```javascript
+     * shader.setUniform('resolution.value.x', 512);
+     * ```
+     *
+     * The change to the uniform will take effect the next time the shader is rendered.
+     * @param key The key of the uniform to modify. Use dots for deep properties, i.e. `resolution.value.x`.
+     * @param value The value to set into the uniform.
+     */
     open fun setUniform(key: String, value: Any): Shader /* this */
-    open fun getUniform(key: String): Any
+
+    /**
+     * Returns the uniform object for the given key, or `null` if the uniform couldn't be found.
+     * @param key The key of the uniform to return the value for.
+     */
+    open fun getUniform(key: String): Any?
+
     open fun setChannel0(textureKey: String, textureData: Any = definedExternally): Shader /* this */
     open fun setChannel1(textureKey: String, textureData: Any = definedExternally): Shader /* this */
     open fun setChannel2(textureKey: String, textureData: Any = definedExternally): Shader /* this */
@@ -6848,7 +6564,28 @@ open external class Shader : GameObject, ComputedSize, Depth, GetBounds, Mask, O
     override fun updateDisplayOrigin(): Shader /* this */
     override var scrollFactorX: Number
     override var scrollFactorY: Number
+
+    /**
+     * Sets the scroll factor of this Game Object.
+     *
+     * The scroll factor controls the influence of the movement of a Camera upon this Game Object.
+     *
+     * When a camera scrolls it will change the location at which this Game Object is rendered on-screen.
+     * It does not change the Game Objects actual position values.
+     *
+     * A value of 1 means it will move exactly in sync with a camera.
+     * A value of 0 means it will not move at all, even if the camera moves.
+     * Other values control the degree to which the camera movement is mapped to this Game Object.
+     *
+     * Please be aware that scroll factor values other than 1 are not taken in to consideration when
+     * calculating physics collisions. Bodies always collide based on their world position, but changing
+     * the scroll factor is a visual adjustment to where the textures are rendered, which can offset
+     * them from physics bodies if not accounted for in your code.
+     * @param x The horizontal scroll factor of this Game Object.
+     * @param y The vertical scroll factor of this Game Object. If not set it will use the `x` value. Default x.
+     */
     override fun setScrollFactor(x: Number, y: Number): Shader /* this */
+
     override val hasTransformComponent: Boolean
     override var x: Number
     override var y: Number
