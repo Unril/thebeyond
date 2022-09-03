@@ -6,12 +6,15 @@ import constants.BitmapFontKeys
 import constants.SceneKeys
 
 class DebugInfo : Scene(SceneKeys.DEBUG_INFO) {
+    private companion object {
+        const val TEXT_SIZE = 16
+    }
+
     private lateinit var _text: BitmapText
 
     override fun create() {
-        _text = add.bitmapText(10, 10, BitmapFontKeys.ROBOTO_WHITE, "", 16)
+        _text = add.bitmapText(10, 10, BitmapFontKeys.ROBOTO_WHITE, "", TEXT_SIZE)
             .setOrigin(0, 0)
-            .setScrollFactor(0, 0)
 
         scene.bringToTop()
     }

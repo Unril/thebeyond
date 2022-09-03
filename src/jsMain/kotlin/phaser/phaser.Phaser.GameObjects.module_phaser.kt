@@ -1541,7 +1541,8 @@ open external class DOMElement : GameObject, AlphaSingle, BlendMode, Depth, Orig
     open fun setPerspective(value: Number): DOMElement /* this */
     open var perspective: Number
     open fun addListener(events: String): DOMElement /* this */
-    override fun removeListener(event: String): DOMElement /* this */
+    override fun removeListener(event: String, fn: Function<*>?, context: Any?, once: Boolean?): DOMElement /* this */
+
     open fun createElement(
         tagName: String,
         style: String = definedExternally,
@@ -6593,8 +6594,31 @@ open external class Shader
     override var height: Number
     override var displayWidth: Number
     override var displayHeight: Number
+
+    /**
+     * Sets the internal size of this Game Object, as used for frame or physics body creation.
+     *
+     * This will not change the size that the Game Object is rendered in-game.
+     * For that you need to either set the scale of the Game Object (`setScale`) or call the
+     * `setDisplaySize` method, which is the same thing as changing the scale but allows you
+     * to do so by giving pixel values.
+     *
+     * If you have enabled this Game Object for input, changing the size will _not_ change the
+     * size of the hit area. To do this you should adjust the `input.hitArea` object directly.
+     * @param width The width of this Game Object.
+     * @param height The height of this Game Object.
+     */
     override fun setSize(width: Number, height: Number): Shader /* this */
+
+    /**
+     * Sets the display size of this Game Object.
+     *
+     * Calling this will adjust the scale.
+     * @param width The width of this Game Object.
+     * @param height The height of this Game Object.
+     */
     override fun setDisplaySize(width: Number, height: Number): Shader /* this */
+
     override var depth: Number
     override fun setDepth(value: Number): Shader /* this */
     override fun <O : Vector2> getCenter(output: O): O

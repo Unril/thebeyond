@@ -1,38 +1,34 @@
 package game.scenes
 
-import Phaser.GameObjects.Shader
+import Phaser.Cameras.Scene2D.BaseCamera
+import Phaser.Cameras.Scene2D.Events.FOLLOW_UPDATE
 import Phaser.Scene
 import constants.AtlasFrames
 import constants.AtlasKeys
+import constants.EventKeys
 import constants.SceneKeys
-import constants.ShaderKeys
 
 class Main : Scene(SceneKeys.MAIN) {
     private lateinit var _cursors: Phaser.Types.Input.Keyboard.CursorKeys
     private lateinit var _player: Phaser.GameObjects.Sprite
 
-    private lateinit var _stars: Shader
-
     override fun create() {
-        _stars = add.shader(ShaderKeys.STARS, 0, 0, scale.gameSize.width, scale.gameSize.height)
-            .setOrigin(0, 0)
-            .setScrollFactor(0, 0)
-
         _player = add.sprite(100, 100, AtlasKeys.SPACE_SHOOTER, AtlasFrames.SPACE_SHOOTER_PLAYER_SHIP_1_BLUE)
-        cameras.main.startFollow(_player, false, 0.05, 0.05)
+        cameras.main.startFollow(_player, true, 0.05, 0.05)
 
         _cursors = input.keyboard.createCursorKeys()
-
         physics.add.existing(_player, false)
 
-        scale.on("resize", ::resize, this)
+        cameras.main.on(FOLLOW_UPDATE, ::onFollowUpdate, this)
+    }
+
+    private fun onFollowUpdate(camera: BaseCamera) {
+        game.events.emit(EventKeys.MOVE_BACKGROUND, camera.midPoint)
     }
 
     override fun update(time: Number, delta: Number) {
         val body: Phaser.Physics.Arcade.Body = _player.body
         body.setVelocity(0);
-
-        _stars.setUniform("mouse.value", cameras.main.midPoint)
 
         val vel = 500
         if (_cursors.left.isDown) {
@@ -50,18 +46,5 @@ class Main : Scene(SceneKeys.MAIN) {
             _player.setAngle(180)
             body.setVelocityY(vel);
         }
-    }
-
-    fun resize(
-        gameSize: Phaser.Structs.Size,
-        baseSize: Phaser.Structs.Size,
-        displaySize: Phaser.Structs.Size,
-        resolution: Number
-    ) {
-        val width = gameSize.width
-        val height = gameSize.height
-
-        cameras.resize(width, height)
-        _stars.setDisplaySize(width, height)
     }
 }

@@ -9,38 +9,146 @@
 
 package Phaser.Cameras.Scene2D.Events
 
-external var DESTROY: Any
+/**
+ * The Destroy Camera Event.
+ *
+ * This event is dispatched by a Camera instance when it is destroyed by the Camera Manager.
+ */
+external var DESTROY: String
 
-external var FADE_IN_COMPLETE: Any
+/**
+ * The Camera Fade In Complete Event.
+ *
+ * This event is dispatched by a Camera instance when the Fade In Effect completes.
+ *
+ * Listen to it from a Camera instance using `Camera.on('camerafadeincomplete', listener)`.
+ */
+external var FADE_IN_COMPLETE: String
 
-external var FADE_IN_START: Any
+/**
+ * The Camera Fade In Start Event.
+ *
+ * This event is dispatched by a Camera instance when the Fade In Effect starts.
+ *
+ * Listen to it from a Camera instance using `Camera.on('camerafadeinstart', listener)`.
+ */
+external var FADE_IN_START: String
 
-external var FADE_OUT_COMPLETE: Any
+/**
+ * The Camera Fade Out Complete Event.
+ *
+ * This event is dispatched by a Camera instance when the Fade Out Effect completes.
+ *
+ * Listen to it from a Camera instance using `Camera.on('camerafadeoutcomplete', listener)`.
+ */
+external var FADE_OUT_COMPLETE: String
 
-external var FADE_OUT_START: Any
+/**
+ * The Camera Fade Out Start Event.
+ *
+ * This event is dispatched by a Camera instance when the Fade Out Effect starts.
+ *
+ * Listen to it from a Camera instance using `Camera.on('camerafadeoutstart', listener)`.
+ */
+external var FADE_OUT_START: String
 
-external var FLASH_COMPLETE: Any
+/**
+ * The Camera Flash Complete Event.
+ *
+ * This event is dispatched by a Camera instance when the Flash Effect completes.
+ */
+external var FLASH_COMPLETE: String
 
-external var FLASH_START: Any
+/**
+ * The Camera Flash Start Event.
+ *
+ * This event is dispatched by a Camera instance when the Flash Effect starts.
+ */
+external var FLASH_START: String
 
-external var FOLLOW_UPDATE: Any
+/**
+ * The Camera Follower Update Event.
+ *
+ * This event is dispatched by a Camera instance when it is following a
+ * Game Object and the Camera position has been updated as a result of
+ * that following.
+ *
+ * Listen to it from a Camera instance using: `camera.on('followupdate', listener)`.
+ */
+external var FOLLOW_UPDATE: String
 
-external var PAN_COMPLETE: Any
+/**
+ * The Camera Pan Complete Event.
+ *
+ * This event is dispatched by a Camera instance when the Pan Effect completes.
+ */
+external var PAN_COMPLETE: String
 
-external var PAN_START: Any
+/**
+ * The Camera Pan Start Event.
+ *
+ * This event is dispatched by a Camera instance when the Pan Effect starts.
+ */
+external var PAN_START: String
 
-external var POST_RENDER: Any
+/**
+ * The Camera Post-Render Event.
+ *
+ * This event is dispatched by a Camera instance after is has finished rendering.
+ * It is only dispatched if the Camera is rendering to a texture.
+ *
+ * Listen to it from a Camera instance using: `camera.on('postrender', listener)`.
+ */
+external var POST_RENDER: String
 
-external var PRE_RENDER: Any
+/**
+ * The Camera Pre-Render Event.
+ *
+ * This event is dispatched by a Camera instance when it is about to render.
+ * It is only dispatched if the Camera is rendering to a texture.
+ *
+ * Listen to it from a Camera instance using: `camera.on('prerender', listener)`.
+ */
+external var PRE_RENDER: String
 
-external var ROTATE_COMPLETE: Any
+/**
+ * The Camera Rotate Complete Event.
+ *
+ * This event is dispatched by a Camera instance when the Rotate Effect completes.
+ */
+external var ROTATE_COMPLETE: String
 
-external var ROTATE_START: Any
+/**
+ * The Camera Rotate Start Event.
+ *
+ * This event is dispatched by a Camera instance when the Rotate Effect starts.
+ */
+external var ROTATE_START: String
 
-external var SHAKE_COMPLETE: Any
+/**
+ * The Camera Shake Complete Event.
+ *
+ * This event is dispatched by a Camera instance when the Shake Effect completes.
+ */
+external var SHAKE_COMPLETE: String
 
-external var SHAKE_START: Any
+/**
+ * The Camera Shake Start Event.
+ *
+ * This event is dispatched by a Camera instance when the Shake Effect starts.
+ */
+external var SHAKE_START: String
 
-external var ZOOM_COMPLETE: Any
+/**
+ * The Camera Zoom Complete Event.
+ *
+ * This event is dispatched by a Camera instance when the Zoom Effect completes.
+ */
+external var ZOOM_COMPLETE: String
 
-external var ZOOM_START: Any
+/**
+ * The Camera Zoom Start Event.
+ *
+ * This event is dispatched by a Camera instance when the Zoom Effect starts.
+ */
+external var ZOOM_START: String

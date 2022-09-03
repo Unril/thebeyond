@@ -83,9 +83,9 @@ vec3 StarField(vec2 p, float du)
 void main(void)
 {
     float du = 1.0 / resolution.y;
-    vec2 mouseCorr = vec2(-mouse.x, mouse.y) / resolution.xy;
+    vec2 mouseCorr = vec2(-mouse.x, mouse.y) * 0.001 / resolution.xy;
     vec2 uv = du * (gl_FragCoord.xy - 0.5 * resolution.xy);
-    vec2 uvRes = uv + 1.33 + time * 0.0001 - mouseCorr.xy * 0.01;
+    vec2 uvRes = uv + 1.33 + time * 0.0001 - mouseCorr.xy;
     vec3 field = StarField(uvRes, du);
     gl_FragColor = vec4(field, 0.0);
 }
