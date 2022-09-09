@@ -1141,6 +1141,48 @@ external fun BuildGameObject(scene: Scene, gameObject: GameObject, config: GameO
 
 external fun BuildGameObjectAnimation(sprite: Sprite, config: Any?): Sprite
 
+/**
+ * A Container Game Object.
+ *
+ * A Container, as the name implies, can 'contain' other types of Game Object.
+ * When a Game Object is added to a Container, the Container becomes responsible for the rendering of it.
+ * By default, it will be removed from the Display List and instead added to the Containers own internal list.
+ *
+ * The position of the Game Object automatically becomes relative to the position of the Container.
+ *
+ * The transform point of a Container is 0x0 (in local space) and that cannot be changed. The children you add to the
+ * Container should be positioned with this value in mind. I.e. you should treat 0x0 as being the center of
+ * the Container, and position children positively and negative around it as required.
+ *
+ * When the Container is rendered, all of its children are rendered as well, in the order in which they exist
+ * within the Container. Container children can be repositioned using methods such as `MoveUp`, `MoveDown` and `SendToBack`.
+ *
+ * If you modify a transform property of the Container, such as `Container.x` or `Container.rotation` then it will
+ * automatically influence all children as well.
+ *
+ * Containers can include other Containers for deeply nested transforms.
+ *
+ * Containers can have masks set on them and can be used as a mask too. However, Container children cannot be masked.
+ * The masks do not 'stack up'. Only a Container on the root of the display list will use its mask.
+ *
+ * Containers can be enabled for input. Because they do not have a texture you need to provide a shape for them
+ * to use as their hit area. Container children can also be enabled for input, independent of the Container.
+ *
+ * If input enabling a _child_ you should not set both the `origin` and a **negative** scale factor on the child,
+ * or the input area will become misaligned.
+ *
+ * Containers can be given a physics body for either Arcade Physics, Impact Physics or Matter Physics. However,
+ * if Container _children_ are enabled for physics you may get unexpected results, such as offset bodies,
+ * if the Container itself, or any of its ancestors, is positioned anywhere other than at 0 x 0. Container children
+ * with physics do not factor in the Container due to the excessive extra calculations needed. Please structure
+ * your game to work around this.
+ *
+ * It's important to understand the impact of using Containers. They add additional processing overhead into
+ * every one of their children. The deeper you nest them, the more the cost escalates. This is especially true
+ * for input events. You also loose the ability to set the display depth of Container children in the same
+ * flexible manner as those not within them. In short, don't use them for the sake of it. You pay a small cost
+ * every time you create one, try to structure your game around avoiding that where possible.
+ */
 open external class Container(
     scene: Scene,
     x: Number = definedExternally,
@@ -2077,6 +2119,8 @@ open external class GameObjectFactory(scene: Scene) {
         children: Array<GameObject> = definedExternally
     ): Container
 
+    open fun container(): Container
+
     /**
      * DOM Element Game Objects are a way to control and manipulate HTML Elements over the top of your game.
      *
@@ -2195,6 +2239,7 @@ open external class GameObjectFactory(scene: Scene) {
      * Phaser.Types.GameObjects.Group.GroupConfig | Phaser.Types.GameObjects.Group.GroupCreateConfig
      */
     open fun group(children: dynamic = definedExternally, config: dynamic = definedExternally): Group
+    open fun group(): Group
 
     /**
      * Creates a new Image Game Object and adds it to the Scene.
@@ -2265,13 +2310,13 @@ open external class GameObjectFactory(scene: Scene) {
     open fun particles(
         texture: dynamic,
         frame: dynamic = definedExternally,
-        emitters: ParticleEmitterConfig? = definedExternally
+        emitters: ParticleEmitterConfig = definedExternally
     ): ParticleEmitterManager
 
     open fun particles(
         texture: dynamic,
-        frame: dynamic = definedExternally,
-        emitters: Array<ParticleEmitterConfig> = definedExternally
+        frame: dynamic,
+        emitters: Array<ParticleEmitterConfig>
     ): ParticleEmitterManager
 
     /**
@@ -3163,6 +3208,13 @@ open external class Graphics(
     }
 }
 
+/**
+ * A Group is a way for you to create, manipulate, or recycle similar Game Objects.
+ *
+ * Group membership is non-exclusive. A Game Object can belong to several groups, one group, or none.
+ *
+ * Groups themselves aren't displayable, and can't be positioned, rotated, scaled, or hidden.
+ */
 open external class Group : EventEmitter {
     constructor(scene: Scene, children: Array<GameObject> = definedExternally, config: GroupConfig = definedExternally)
     constructor(scene: Scene)
@@ -3987,6 +4039,49 @@ open external class Image : GameObject, Alpha, BlendMode, Depth, Flip, FX, GetBo
     override fun setVisible(value: Boolean): Image /* this */
 }
 
+/**
+ * A Layer Game Object.
+ *
+ * A Layer is a special type of Game Object that acts as a Display List. You can add any type of Game Object
+ * to a Layer, just as you would to a Scene. Layers can be used to visually group together 'layers' of Game
+ * Objects:
+ *
+ * ```javascript
+ * const spaceman = this.add.sprite(150, 300, 'spaceman');
+ * const bunny = this.add.sprite(400, 300, 'bunny');
+ * const elephant = this.add.sprite(650, 300, 'elephant');
+ *
+ * const layer = this.add.layer();
+ *
+ * layer.add([ spaceman, bunny, elephant ]);
+ * ```
+ *
+ * The 3 sprites in the example above will now be managed by the Layer they were added to. Therefore,
+ * if you then set `layer.setVisible(false)` they would all vanish from the display.
+ *
+ * You can also control the depth of the Game Objects within the Layer. For example, calling the
+ * `setDepth` method of a child of a Layer will allow you to adjust the depth of that child _within the
+ * Layer itself_, rather than the whole Scene. The Layer, too, can have its depth set as well.
+ *
+ * The Layer class also offers many different methods for manipulating the list, such as the
+ * methods `moveUp`, `moveDown`, `sendToBack`, `bringToTop` and so on. These allow you to change the
+ * display list position of the Layers children, causing it to adjust the order in which they are
+ * rendered. Using `setDepth` on a child allows you to override this.
+ *
+ * Layers can have Post FX Pipelines set, which allows you to easily enable a post pipeline across
+ * a whole range of children, which, depending on the effect, can often be far more efficient that doing so
+ * on a per-child basis.
+ *
+ * Layers have no position or size within the Scene. This means you cannot enable a Layer for
+ * physics or input, or change the position, rotation or scale of a Layer. They also have no scroll
+ * factor, texture, tint, origin, crop or bounds.
+ *
+ * If you need those kind of features then you should use a Container instead. Containers can be added
+ * to Layers, but Layers cannot be added to Containers.
+ *
+ * However, you can set the Alpha, Blend Mode, Depth, Mask and Visible state of a Layer. These settings
+ * will impact all children being rendered by the Layer.
+ */
 open external class Layer(scene: Scene, children: Array<GameObject> = definedExternally) : List<GameObject>,
     AlphaSingle, BlendMode, Depth, Mask, Pipeline, Visible {
     open var scene: Scene

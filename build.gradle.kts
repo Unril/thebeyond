@@ -2,14 +2,17 @@ val kotlinWrappersVersion = "1.0.0-pre.376"
 val serializationVersion = "1.4.0"
 val ktorVersion = "2.1.0"
 val logbackVersion = "1.3.0-beta0"
+val komapperVersion = "1.3.0"
 
 plugins {
+    application
+    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
+    idea
     kotlin("multiplatform") version "1.7.10"
     kotlin("plugin.serialization") version "1.7.10"
-    application
 }
 
-group = "pro.thebeyond"
+group = "dev.thebeyond"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -52,7 +55,11 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
+                implementation("org.komapper:komapper-starter-jdbc:$komapperVersion")
+                implementation("org.komapper:komapper-dialect-h2-jdbc:$komapperVersion")
+
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-server-auth:$ktorVersion")
@@ -93,9 +100,14 @@ kotlin {
     }
 }
 
+dependencies {
+    add("kspJvm", "org.komapper:komapper-processor:$komapperVersion")
+    add("kspJvmTest", "org.komapper:komapper-processor:$komapperVersion")
+}
+
 application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
-    mainClass.set("pro.thebeyond.application.ServerKt")
+    mainClass.set("dev.thebeyond.application.ServerKt")
 }
 
 // include JS artifacts in any JAR we generate

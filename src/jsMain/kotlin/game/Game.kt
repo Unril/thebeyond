@@ -1,5 +1,6 @@
 package game
 
+import Phaser.Math.Vector2
 import Phaser.Scale.ScaleModes
 import Phaser.Types.Core.GameConfig
 import Phaser.WEBGL
@@ -27,9 +28,11 @@ class Game {
                 height = "100%"
             }
             physics = jso {
-                default = "arcade"
-                arcade = jso {
-                    debug = false
+                default = "matter"
+                matter = jso {
+                    debug = true
+                    gravity = Vector2(0, 0)
+                    setBounds = false
                 }
             }
             scene = arrayOf(::Preloader, ::Background, ::Main, ::DebugInfo)

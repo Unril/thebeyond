@@ -219,7 +219,13 @@ open external class Image : Phaser.GameObjects.Image, Acceleration, Angular, Bou
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Image /* this */
-    override fun setTint(topLeft: Number?, topRight: Number?, bottomLeft: Number?, bottomRight: Number?): Image /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Image /* this */
+
     override fun setTintFill(
         topLeft: Number?,
         topRight: Number?,
@@ -1108,12 +1114,26 @@ open external class ArcadePhysics(scene: Scene) {
         maxTime: Number = definedExternally
     ): Number
 
+    /**
+     * Given the angle (in degrees) and speed calculate the velocity and return it as a vector, or set it to the given vector object.
+     * One way to use this is: velocityFromAngle(angle, 200, sprite.body.velocity) which will set the values directly to the sprite's velocity and not create a new vector object.
+     * @param angle The angle in degrees calculated in clockwise positive direction (down = 90 degrees positive, right = 0 degrees positive, up = 90 degrees negative)
+     * @param speed The speed it will move, in pixels per second squared. Default 60.
+     * @param vec2 The Vector2 in which the x and y properties will be set to the calculated velocity.
+     */
     open fun velocityFromAngle(
         angle: Number,
         speed: Number = definedExternally,
         vec2: Vector2 = definedExternally
     ): Vector2
 
+    /**
+     * Given the rotation (in radians) and speed calculate the velocity and return it as a vector, or set it to the given vector object.
+     * One way to use this is: velocityFromRotation(rotation, 200, sprite.body.velocity) which will set the values directly to the sprite's velocity and not create a new vector object.
+     * @param rotation The angle in radians.
+     * @param speed The speed it will move, in pixels per second squared Default 60.
+     * @param vec2 The Vector2 in which the x and y properties will be set to the calculated velocity.
+     */
     open fun velocityFromRotation(
         rotation: Number,
         speed: Number = definedExternally,
@@ -1315,7 +1335,13 @@ open external class Sprite : Phaser.GameObjects.Sprite, Acceleration, Angular, B
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Sprite /* this */
-    override fun setTint(topLeft: Number?, topRight: Number?, bottomLeft: Number?, bottomRight: Number?): Sprite /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Sprite /* this */
+
     override fun setTintFill(
         topLeft: Number?,
         topRight: Number?,
@@ -1411,106 +1437,624 @@ open external class Sprite : Phaser.GameObjects.Sprite, Acceleration, Angular, B
     override fun setSize(width: Number, height: Number, center: Boolean): Size /* this */
 }
 
+/**
+ * A Dynamic Arcade Body.
+ *
+ * Its static counterpart is {@link Phaser.Physics.Arcade.StaticBody}.
+ */
 open external class Body(world: World, gameObject: GameObject) {
+    /**
+     * The Arcade Physics simulation this Body belongs to.
+     */
     open var world: World
+
+    /**
+     * The Game Object this Body belongs to.
+     */
     open var gameObject: GameObject
+
+    /**
+     * Transformations applied to this Body.
+     */
     open var transform: Any?
+
+    /**
+     * Whether the Body is drawn to the debug display.
+     */
     open var debugShowBody: Boolean
+
+    /**
+     * Whether the Body's velocity is drawn to the debug display.
+     */
     open var debugShowVelocity: Boolean
+
+    /**
+     * The color of this Body on the debug display.
+     */
     open var debugBodyColor: Number
+
+    /**
+     * Whether this Body is updated by the physics simulation.
+     */
     open var enable: Boolean
+
+    /**
+     * Whether this Body is circular (true) or rectangular (false).
+     */
     open var isCircle: Boolean
+
+    /**
+     * If this Body is circular, this is the unscaled radius of the Body, as set by setCircle(), in source pixels.
+     * The true radius is equal to `halfWidth`.
+     */
     open var radius: Number
+
+    /**
+     * The offset of this Body's position from its Game Object's position, in source pixels.
+     */
     open var offset: Vector2
+
+    /**
+     * The position of this Body within the simulation.
+     */
     open var position: Vector2
+
+    /**
+     * The position of this Body during the previous step.
+     */
     open var prev: Vector2
+
+    /**
+     * The position of this Body during the previous frame.
+     */
     open var prevFrame: Vector2
+
+    /**
+     * Whether this Body's `rotation` is affected by its angular acceleration and angular velocity.
+     */
     open var allowRotation: Boolean
+
+    /**
+     * This body's rotation, in degrees, based on its angular acceleration and angular velocity.
+     * The Body's rotation controls the `angle` of its Game Object.
+     * It doesn't rotate the Body's own geometry, which is always an axis-aligned rectangle or a circle.
+     */
     open var rotation: Number
+
+    /**
+     * The Body rotation, in degrees, during the previous step.
+     */
     open var preRotation: Number
+
+    /**
+     * The width of the Body, in pixels.
+     * If the Body is circular, this is also the diameter.
+     * If you wish to change the width use the `Body.setSize` method.
+     */
     open val width: Number
+
+    /**
+     * The height of the Body, in pixels.
+     * If the Body is circular, this is also the diameter.
+     * If you wish to change the height use the `Body.setSize` method.
+     */
     open val height: Number
+
+    /**
+     * The unscaled width of the Body, in source pixels, as set by setSize().
+     * The default is the width of the Body's Game Object's texture frame.
+     */
     open var sourceWidth: Number
+
+    /**
+     * The unscaled height of the Body, in source pixels, as set by setSize().
+     * The default is the height of the Body's Game Object's texture frame.
+     */
     open var sourceHeight: Number
+
+    /**
+     * Half the Body's width, in pixels.
+     */
     open var halfWidth: Number
+
+    /**
+     * Half the Body's height, in pixels.
+     */
     open var halfHeight: Number
+
+    /**
+     * The center of the Body.
+     * The midpoint of its `position` (top-left corner) and its bottom-right corner.
+     */
     open var center: Vector2
+
+    /**
+     * The Body's velocity, in pixels per second.
+     */
     open var velocity: Vector2
+
+    /**
+     * The Body's change in position (due to velocity) at the last step, in pixels.
+     *
+     * The size of this value depends on the simulation's step rate.
+     */
     open val newVelocity: Vector2
+
+    /**
+     * The Body's absolute maximum change in position, in pixels per step.
+     */
     open var deltaMax: Vector2
+
+    /**
+     * The Body's change in velocity, in pixels per second squared.
+     */
     open var acceleration: Vector2
+
+    /**
+     * Whether this Body's velocity is affected by its `drag`.
+     */
     open var allowDrag: Boolean
+
+    /**
+     * When `useDamping` is false (the default), this is absolute loss of velocity due to movement, in pixels per second squared.
+     *
+     * When `useDamping` is true, this is a damping multiplier between 0 and 1.
+     * A value of 0 means the Body stops instantly.
+     * A value of 0.01 mean the Body keeps 1% of its velocity per second, losing 99%.
+     * A value of 0.1 means the Body keeps 10% of its velocity per second, losing 90%.
+     * A value of 1 means the Body loses no velocity.
+     * You can use very small values (e.g., 0.001) to stop the Body quickly.
+     *
+     * The x and y components are applied separately.
+     *
+     * Drag is applied only when `acceleration` is zero.
+     */
     open var drag: Vector2
+
+    /**
+     * Whether this Body's position is affected by gravity (local or world).
+     */
     open var allowGravity: Boolean
+
+    /**
+     * Acceleration due to gravity (specific to this Body), in pixels per second squared.
+     * Total gravity is the sum of this vector and the simulation's `gravity`.
+     */
     open var gravity: Vector2
+
+    /**
+     * Rebound following a collision, relative to 1.
+     */
     open var bounce: Vector2
+
+    /**
+     * Rebound following a collision with the world boundary, relative to 1.
+     * If null, `bounce` is used instead.
+     */
     open var worldBounce: Vector2
+
+    /**
+     * The rectangle used for world boundary collisions.
+     *
+     * By default it is set to the world boundary rectangle. Or, if this Body was
+     * created by a Physics Group, then whatever rectangle that Group defined.
+     *
+     * You can also change it by using the `Body.setBoundsRectangle` method.
+     */
     open var customBoundsRectangle: Rectangle
+
+    /**
+     * Whether the simulation emits a `worldbounds` event when this Body collides with the world boundary (and `collideWorldBounds` is also true).
+     */
     open var onWorldBounds: Boolean
+
+    /**
+     * Whether the simulation emits a `collide` event when this Body collides with another.
+     */
     open var onCollide: Boolean
+
+    /**
+     * Whether the simulation emits an `overlap` event when this Body overlaps with another.
+     */
     open var onOverlap: Boolean
+
+    /**
+     * The Body's absolute maximum velocity, in pixels per second.
+     * The horizontal and vertical components are applied separately.
+     */
     open var maxVelocity: Vector2
+
+    /**
+     * The maximum speed this Body is allowed to reach, in pixels per second.
+     *
+     * If not negative it limits the scalar value of speed.
+     *
+     * Any negative value means no maximum is being applied (the default).
+     */
     open var maxSpeed: Number
+
+    /**
+     * If this Body is `immovable` and in motion, `friction` is the proportion of this Body's motion received by the riding Body on each axis, relative to 1.
+     * The horizontal component (x) is applied only when two colliding Bodies are separated vertically.
+     * The vertical component (y) is applied only when two colliding Bodies are separated horizontally.
+     * The default value (1, 0) moves the riding Body horizontally in equal proportion to this Body and vertically not at all.
+     */
     open var friction: Vector2
+
+    /**
+     * If this Body is using `drag` for deceleration this property controls how the drag is applied.
+     * If set to `true` drag will use a damping effect rather than a linear approach. If you are
+     * creating a game where the Body moves freely at any angle (i.e. like the way the ship moves in
+     * the game Asteroids) then you will get a far smoother and more visually correct deceleration
+     * by using damping, avoiding the axis-drift that is prone with linear deceleration.
+     *
+     * If you enable this property then you should use far smaller `drag` values than with linear, as
+     * they are used as a multiplier on the velocity. Values such as 0.05 will give a nice slow
+     * deceleration.
+     */
     open var useDamping: Boolean
+
+    /**
+     * The rate of change of this Body's `rotation`, in degrees per second.
+     */
     open var angularVelocity: Number
+
+    /**
+     * The Body's angular acceleration (change in angular velocity), in degrees per second squared.
+     */
     open var angularAcceleration: Number
+
+    /**
+     * Loss of angular velocity due to angular movement, in degrees per second.
+     *
+     * Angular drag is applied only when angular acceleration is zero.
+     */
     open var angularDrag: Number
+
+    /**
+     * The Body's maximum angular velocity, in degrees per second.
+     */
     open var maxAngular: Number
+
+    /**
+     * The Body's inertia, relative to a default unit (1).
+     * With `bounce`, this affects the exchange of momentum (velocities) during collisions.
+     */
     open var mass: Number
+
+    /**
+     * The calculated angle of this Body's velocity vector, in radians, during the last step.
+     */
     open var angle: Number
+
+    /**
+     * The calculated magnitude of the Body's velocity, in pixels per second, during the last step.
+     */
     open var speed: Number
+
+    /**
+     * The direction of the Body's velocity, as calculated during the last step.
+     * This is a numeric constant value (FACING_UP, FACING_DOWN, FACING_LEFT, FACING_RIGHT).
+     * If the Body is moving on both axes, this describes motion on the vertical axis only.
+     */
     open var facing: Number
+
+    /**
+     * Whether this Body can be moved by collisions with another Body.
+     */
     open var immovable: Boolean
+
+    /**
+     * Sets if this Body can be pushed by another Body.
+     *
+     * A body that cannot be pushed will reflect back all of the velocity it is given to the
+     * colliding body. If that body is also not pushable, then the separation will be split
+     * between them evenly.
+     *
+     * If you want your body to never move or seperate at all, see the `setImmovable` method.
+     *
+     * By default, Dynamic Bodies are always pushable.
+     */
     open var pushable: Boolean
+
+    /**
+     * Whether the Body's position and rotation are affected by its velocity, acceleration, drag, and gravity.
+     */
     open var moves: Boolean
+
+    /**
+     * A flag disabling the default horizontal separation of colliding bodies.
+     * Pass your own `collideCallback` to the collider.
+     */
     open var customSeparateX: Boolean
+
+    /**
+     * A flag disabling the default vertical separation of colliding bodies.
+     * Pass your own `collideCallback` to the collider.
+     */
     open var customSeparateY: Boolean
+
+    /**
+     * The amount of horizontal overlap (before separation), if this Body is colliding with another.
+     */
     open var overlapX: Number
+
+    /**
+     * The amount of vertical overlap (before separation), if this Body is colliding with another.
+     */
     open var overlapY: Number
+
+    /**
+     * The amount of overlap (before separation), if this Body is circular and colliding with another circular body.
+     */
     open var overlapR: Number
+
+    /**
+     * Whether this Body is overlapped with another and both are not moving, on at least one axis.
+     */
     open var embedded: Boolean
+
+    /**
+     * Whether this Body interacts with the world boundary.
+     */
     open var collideWorldBounds: Boolean
+
+    /**
+     * Whether this Body is checked for collisions and for which directions.
+     * You can set `checkCollision.none = true` to disable collision checks.
+     */
     open var checkCollision: ArcadeBodyCollision
+
+    /**
+     * Whether this Body is colliding with a Body or Static Body and in which direction.
+     * In a collision where both bodies have zero velocity, `embedded` will be set instead.
+     */
     open var touching: ArcadeBodyCollision
+
+    /**
+     * This Body's `touching` value during the previous step.
+     */
     open var wasTouching: ArcadeBodyCollision
+
+    /**
+     * Whether this Body is colliding with a Static Body, a tile, or the world boundary.
+     * In a collision with a Static Body, if this Body has zero velocity then `embedded` will be set instead.
+     */
     open var blocked: ArcadeBodyCollision
+
+    /**
+     * Whether to automatically synchronize this Body's dimensions to the dimensions of its Game Object's visual bounds.
+     */
     open var syncBounds: Boolean
+
+    /**
+     * The Body's physics type (dynamic or static).
+     */
     open val physicsType: Number
+
+    /**
+     * Updates the Body's `transform`, `width`, `height`, and `center` from its Game Object.
+     * The Body's `position` isn't changed.
+     */
     open fun updateBounds()
+
+    /**
+     * Updates the Body's `center` from its `position`, `width`, and `height`.
+     */
     open fun updateCenter()
+
+    /**
+     * Updates the Body's `position`, `width`, `height`, and `center` from its Game Object and `offset`.
+     *
+     * You don't need to call this for Dynamic Bodies, as it happens automatically during the physics step.
+     * But you could use it if you have modified the Body offset or Game Object transform and need to immediately
+     * read the Body's new `position` or `center`.
+     *
+     * To resynchronize the Body with its Game Object, use `reset()` instead.
+     */
     open fun updateFromGameObject()
+
+    /**
+     * Prepares the Body for a physics step by resetting the `wasTouching`, `touching` and `blocked` states.
+     *
+     * This method is only called if the physics world is going to run a step this frame.
+     * @param clear Set the `wasTouching` values to their defaults. Default false.
+     */
     open fun resetFlags(clear: Boolean = definedExternally)
+
+    /**
+     * Syncs the position body position with the parent Game Object.
+     *
+     * This method is called every game frame, regardless if the world steps or not.
+     * @param willStep Will this Body run an update as well?
+     * @param delta The delta time, in seconds, elapsed since the last frame.
+     */
     open fun preUpdate(willStep: Boolean, delta: Number)
+
+    /**
+     * Performs a single physics step and updates the body velocity, angle, speed and other properties.
+     *
+     * This method can be called multiple times per game frame, depending on the physics step rate.
+     *
+     * The results are synced back to the Game Object in `postUpdate`.
+     * @param delta The delta time, in seconds, elapsed since the last frame.
+     */
     open fun update(delta: Number)
+
+    /**
+     * Feeds the Body results back into the parent Game Object.
+     *
+     * This method is called every game frame, regardless if the world steps or not.
+     */
     open fun postUpdate()
+
+    /**
+     * Sets a custom collision boundary rectangle. Use if you want to have a custom
+     * boundary instead of the world boundaries.
+     * @param bounds The new boundary rectangle. Pass `null` to use the World bounds.
+     */
     open fun setBoundsRectangle(bounds: Rectangle = definedExternally): Body /* this */
+
+    /**
+     * Checks for collisions between this Body and the world boundary and separates them.
+     */
     open fun checkWorldBounds(): Boolean
+
+    /**
+     * Sets the offset of the Body's position from its Game Object's position.
+     * The Body's `position` isn't changed until the next `preUpdate`.
+     * @param x The horizontal offset, in source pixels.
+     * @param y The vertical offset, in source pixels. Default x.
+     */
     open fun setOffset(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * Sizes and positions this Body, as a rectangle.
+     * Modifies the Body `offset` if `center` is true (the default).
+     * Resets the width and height to match current frame, if no width and height provided and a frame is found.
+     * @param width The width of the Body in pixels. Cannot be zero. If not given, and the parent Game Object has a frame, it will use the frame width.
+     * @param height The height of the Body in pixels. Cannot be zero. If not given, and the parent Game Object has a frame, it will use the frame height.
+     * @param center Modify the Body's `offset`, placing the Body's center on its Game Object's center. Only works if the Game Object has the `getCenter` method. Default true.
+     */
     open fun setSize(
         width: Number = definedExternally,
         height: Number = definedExternally,
         center: Boolean = definedExternally
     ): Body
 
+    /**
+     * Sizes and positions this Body, as a circle.
+     * @param radius The radius of the Body, in source pixels.
+     * @param offsetX The horizontal offset of the Body from its Game Object, in source pixels.
+     * @param offsetY The vertical offset of the Body from its Game Object, in source pixels.
+     */
     open fun setCircle(radius: Number, offsetX: Number = definedExternally, offsetY: Number = definedExternally): Body
+
+    /**
+     * Sets this Body's parent Game Object to the given coordinates and resets this Body at the new coordinates.
+     * If the Body had any velocity or acceleration it is lost as a result of calling this.
+     * @param x The horizontal position to place the Game Object.
+     * @param y The vertical position to place the Game Object.
+     */
     open fun reset(x: Number, y: Number)
+
+    /**
+     * Sets acceleration, velocity, and speed to zero.
+     */
     open fun stop(): Body
+
+    /**
+     * Copies the coordinates of this Body's edges into an object.
+     * @param obj An object to copy the values into.
+     */
     open fun getBounds(obj: ArcadeBodyBounds): ArcadeBodyBounds
+
+    /**
+     * Tests if the coordinates are within this Body.
+     * @param x The horizontal coordinate.
+     * @param y The vertical coordinate.
+     */
     open fun hitTest(x: Number, y: Number): Boolean
+
+    /**
+     * Whether this Body is touching a tile or the world boundary while moving down.
+     */
     open fun onFloor(): Boolean
+
+    /**
+     * Whether this Body is touching a tile or the world boundary while moving up.
+     */
     open fun onCeiling(): Boolean
+
+    /**
+     * Whether this Body is touching a tile or the world boundary while moving left or right.
+     */
     open fun onWall(): Boolean
+
+    /**
+     * The absolute (non-negative) change in this Body's horizontal position from the previous step.
+     */
     open fun deltaAbsX(): Number
+
+    /**
+     * The absolute (non-negative) change in this Body's vertical position from the previous step.
+     */
     open fun deltaAbsY(): Number
+
+    /**
+     * The change in this Body's horizontal position from the previous step.
+     * This value is set during the Body's update phase.
+     *
+     * As a Body can update multiple times per step this may not hold the final
+     * delta value for the Body. In this case, please see the `deltaXFinal` method.
+     */
     open fun deltaX(): Number
+
+    /**
+     * The change in this Body's vertical position from the previous step.
+     * This value is set during the Body's update phase.
+     *
+     * As a Body can update multiple times per step this may not hold the final
+     * delta value for the Body. In this case, please see the `deltaYFinal` method.
+     */
     open fun deltaY(): Number
+
+    /**
+     * The change in this Body's horizontal position from the previous game update.
+     *
+     * This value is set during the `postUpdate` phase and takes into account the
+     * `deltaMax` and final position of the Body.
+     *
+     * Because this value is not calculated until `postUpdate`, you must listen for it
+     * during a Scene `POST_UPDATE` or `RENDER` event, and not in `update`, as it will
+     * not be calculated by that point. If you _do_ use these values in `update` they
+     * will represent the delta from the _previous_ game frame.
+     */
     open fun deltaXFinal(): Number
+
+    /**
+     * The change in this Body's vertical position from the previous game update.
+     *
+     * This value is set during the `postUpdate` phase and takes into account the
+     * `deltaMax` and final position of the Body.
+     *
+     * Because this value is not calculated until `postUpdate`, you must listen for it
+     * during a Scene `POST_UPDATE` or `RENDER` event, and not in `update`, as it will
+     * not be calculated by that point. If you _do_ use these values in `update` they
+     * will represent the delta from the _previous_ game frame.
+     */
     open fun deltaYFinal(): Number
+
+    /**
+     * The change in this Body's rotation from the previous step, in degrees.
+     */
     open fun deltaZ(): Number
+
+    /**
+     * Disables this Body and marks it for deletion by the simulation.
+     */
     open fun destroy()
+
+    /**
+     * Draws this Body and its velocity, if enabled.
+     * @param graphic The Graphics object to draw on.
+     */
     open fun drawDebug(graphic: Graphics)
+
+    /**
+     * Whether this Body will be drawn to the debug display.
+     */
     open fun willDrawDebug(): Boolean
+
+    /**
+     * Sets whether this Body collides with the world boundary.
+     *
+     * Optionally also sets the World Bounce and `onWorldBounds` values.
+     * @param value `true` if the Body should collide with the world bounds, otherwise `false`. Default true.
+     * @param bounceX If given this replaces the Body's `worldBounce.x` value.
+     * @param bounceY If given this replaces the Body's `worldBounce.y` value.
+     * @param onWorldBounds If given this replaces the Body's `onWorldBounds` value.
+     */
     open fun setCollideWorldBounds(
         value: Boolean = definedExternally,
         bounceX: Number = definedExternally,
@@ -1518,38 +2062,221 @@ open external class Body(world: World, gameObject: GameObject) {
         onWorldBounds: Boolean = definedExternally
     ): Body
 
+    /**
+     * Sets the Body's velocity.
+     * @param x The horizontal velocity, in pixels per second.
+     * @param y The vertical velocity, in pixels per second. Default x.
+     */
     open fun setVelocity(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * Sets the Body's horizontal velocity.
+     * @param value The velocity, in pixels per second.
+     */
     open fun setVelocityX(value: Number): Body
+
+    /**
+     * Sets the Body's vertical velocity.
+     * @param value The velocity, in pixels per second.
+     */
     open fun setVelocityY(value: Number): Body
+
+    /**
+     * Sets the Body's maximum velocity.
+     * @param x The horizontal velocity, in pixels per second.
+     * @param y The vertical velocity, in pixels per second. Default x.
+     */
     open fun setMaxVelocity(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * Sets the Body's maximum horizontal velocity.
+     * @param value The maximum horizontal velocity, in pixels per second.
+     */
     open fun setMaxVelocityX(value: Number): Body
+
+    /**
+     * Sets the Body's maximum vertical velocity.
+     * @param value The maximum vertical velocity, in pixels per second.
+     */
     open fun setMaxVelocityY(value: Number): Body
+
+    /**
+     * Sets the maximum speed the Body can move.
+     * @param value The maximum speed value, in pixels per second. Set to a negative value to disable.
+     */
     open fun setMaxSpeed(value: Number): Body
+
+    /**
+     * Sets the Body's bounce.
+     * @param x The horizontal bounce, relative to 1.
+     * @param y The vertical bounce, relative to 1. Default x.
+     */
     open fun setBounce(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * Sets the Body's horizontal bounce.
+     * @param value The bounce, relative to 1.
+     */
     open fun setBounceX(value: Number): Body
+
+    /**
+     * Sets the Body's vertical bounce.
+     * @param value The bounce, relative to 1.
+     */
     open fun setBounceY(value: Number): Body
+
+    /**
+     * Sets the Body's acceleration.
+     * @param x The horizontal component, in pixels per second squared.
+     * @param y The vertical component, in pixels per second squared. Default x.
+     */
     open fun setAcceleration(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * Sets the Body's horizontal acceleration.
+     * @param value The acceleration, in pixels per second squared.
+     */
     open fun setAccelerationX(value: Number): Body
+
+    /**
+     * Sets the Body's vertical acceleration.
+     * @param value The acceleration, in pixels per second squared.
+     */
     open fun setAccelerationY(value: Number): Body
+
+    /**
+     * Enables or disables drag.
+     * @param value `true` to allow drag on this body, or `false` to disable it. Default true.
+     */
     open fun setAllowDrag(value: Boolean = definedExternally): Body
+
+    /**
+     * Enables or disables gravity's effect on this Body.
+     * @param value `true` to allow gravity on this body, or `false` to disable it. Default true.
+     */
     open fun setAllowGravity(value: Boolean = definedExternally): Body
+
+    /**
+     * Enables or disables rotation.
+     * @param value `true` to allow rotation on this body, or `false` to disable it. Default true.
+     */
     open fun setAllowRotation(value: Boolean = definedExternally): Body
+
+    /**
+     * Sets the Body's drag.
+     * @param x The horizontal component, in pixels per second squared.
+     * @param y The vertical component, in pixels per second squared. Default x.
+     */
     open fun setDrag(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * If this Body is using `drag` for deceleration this property controls how the drag is applied.
+     * If set to `true` drag will use a damping effect rather than a linear approach. If you are
+     * creating a game where the Body moves freely at any angle (i.e. like the way the ship moves in
+     * the game Asteroids) then you will get a far smoother and more visually correct deceleration
+     * by using damping, avoiding the axis-drift that is prone with linear deceleration.
+     *
+     * If you enable this property then you should use far smaller `drag` values than with linear, as
+     * they are used as a multiplier on the velocity. Values such as 0.95 will give a nice slow
+     * deceleration, where-as smaller values, such as 0.5 will stop an object almost immediately.
+     * @param value `true` to use damping, or `false` to use drag.
+     */
     open fun setDamping(value: Boolean): Body
+
+    /**
+     * Sets the Body's horizontal drag.
+     * @param value The drag, in pixels per second squared.
+     */
     open fun setDragX(value: Number): Body
+
+    /**
+     * Sets the Body's vertical drag.
+     * @param value The drag, in pixels per second squared.
+     */
     open fun setDragY(value: Number): Body
+
+    /**
+     * Sets the Body's gravity.
+     * @param x The horizontal component, in pixels per second squared.
+     * @param y The vertical component, in pixels per second squared. Default x.
+     */
     open fun setGravity(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * Sets the Body's horizontal gravity.
+     * @param value The gravity, in pixels per second squared.
+     */
     open fun setGravityX(value: Number): Body
+
+    /**
+     * Sets the Body's vertical gravity.
+     * @param value The gravity, in pixels per second squared.
+     */
     open fun setGravityY(value: Number): Body
+
+    /**
+     * Sets the Body's friction.
+     * @param x The horizontal component, relative to 1.
+     * @param y The vertical component, relative to 1. Default x.
+     */
     open fun setFriction(x: Number, y: Number = definedExternally): Body
+
+    /**
+     * Sets the Body's horizontal friction.
+     * @param value The friction value, relative to 1.
+     */
     open fun setFrictionX(value: Number): Body
+
+    /**
+     * Sets the Body's vertical friction.
+     * @param value The friction value, relative to 1.
+     */
     open fun setFrictionY(value: Number): Body
+
+    /**
+     * Sets the Body's angular velocity.
+     * @param value The velocity, in degrees per second.
+     */
     open fun setAngularVelocity(value: Number): Body
+
+    /**
+     * Sets the Body's angular acceleration.
+     * @param value The acceleration, in degrees per second squared.
+     */
     open fun setAngularAcceleration(value: Number): Body
+
+    /**
+     * Sets the Body's angular drag.
+     * @param value The drag, in degrees per second squared.
+     */
     open fun setAngularDrag(value: Number): Body
+
+    /**
+     * Sets the Body's mass.
+     * @param value The mass value, relative to 1.
+     */
     open fun setMass(value: Number): Body
+
+    /**
+     * Sets the Body's `immovable` property.
+     * @param value The value to assign to `immovable`. Default true.
+     */
     open fun setImmovable(value: Boolean = definedExternally): Body
+
+    /**
+     * Sets the Body's `enable` property.
+     * @param value The value to assign to `enable`. Default true.
+     */
     open fun setEnable(value: Boolean = definedExternally): Body
+
+    /**
+     * This is an internal handler, called by the `ProcessX` function as part
+     * of the collision step. You should almost never call this directly.
+     * @param x The amount to add to the Body position.
+     * @param vx The amount to add to the Body velocity.
+     * @param left Set the blocked.left value?
+     * @param right Set the blocked.right value?
+     */
     open fun processX(
         x: Number,
         vx: Number = definedExternally,
@@ -1557,6 +2284,14 @@ open external class Body(world: World, gameObject: GameObject) {
         right: Boolean = definedExternally
     )
 
+    /**
+     * This is an internal handler, called by the `ProcessY` function as part
+     * of the collision step. You should almost never call this directly.
+     * @param y The amount to add to the Body position.
+     * @param vy The amount to add to the Body velocity.
+     * @param up Set the blocked.up value?
+     * @param down Set the blocked.down value?
+     */
     open fun processY(
         y: Number,
         vy: Number = definedExternally,
@@ -1564,11 +2299,34 @@ open external class Body(world: World, gameObject: GameObject) {
         down: Boolean = definedExternally
     )
 
+    /**
+     * The Bodys horizontal position (left edge).
+     */
     open var x: Number
+
+    /**
+     * The Bodys vertical position (top edge).
+     */
     open var y: Number
+
+    /**
+     * The left edge of the Body. Identical to x.
+     */
     open val left: Number
+
+    /**
+     * The right edge of the Body.
+     */
     open val right: Number
+
+    /**
+     * The top edge of the Body. Identical to y.
+     */
     open val top: Number
+
+    /**
+     * The bottom edge of this Body.
+     */
     open val bottom: Number
 }
 

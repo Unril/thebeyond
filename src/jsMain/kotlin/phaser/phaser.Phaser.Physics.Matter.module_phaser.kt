@@ -711,25 +711,29 @@ open external class Factory(world: World) {
 
     open fun mouseSpring(options: MatterConstraintConfig = definedExternally): ConstraintType
     open fun pointerConstraint(options: MatterConstraintConfig = definedExternally): ConstraintType
+
+    /**
+     * Creates a Matter Physics Image Game Object.
+     *
+     * An Image is a light-weight Game Object useful for the display of static images in your game,
+     * such as logos, backgrounds, scenery or other non-animated elements. Images can have input
+     * events and physics bodies, or be tweened, tinted or scrolled. The main difference between an
+     * Image and a Sprite is that you cannot animate an Image as they do not have the Animation component.
+     * @param x The horizontal position of this Game Object in the world.
+     * @param y The vertical position of this Game Object in the world.
+     * @param key The key of the Texture this Game Object will use to render with, as stored in the Texture Manager.
+     * @param frame An optional frame from the Texture this Game Object is rendering with. Set to `null` to skip this value.
+     * string | number
+     * @param options An optional Body configuration object that is used to set initial Body properties on creation.
+     */
     open fun image(
         x: Number,
         y: Number,
         key: String,
-        frame: String = definedExternally,
+        frame: dynamic = definedExternally,
         options: MatterBodyConfig = definedExternally
     ): Image
 
-    open fun image(x: Number, y: Number, key: String): Image
-    open fun image(x: Number, y: Number, key: String, frame: String = definedExternally): Image
-    open fun image(
-        x: Number,
-        y: Number,
-        key: String,
-        frame: Number = definedExternally,
-        options: MatterBodyConfig = definedExternally
-    ): Image
-
-    open fun image(x: Number, y: Number, key: String, frame: Number = definedExternally): Image
     open fun tileBody(tile: Tile, options: MatterTileOptions = definedExternally): TileBody
     open fun sprite(
         x: Number,
@@ -750,27 +754,29 @@ open external class Factory(world: World) {
     ): Sprite
 
     open fun sprite(x: Number, y: Number, key: String, frame: Number = definedExternally): Sprite
+
+    /**
+     * Takes an existing Game Object and injects all of the Matter Components into it.
+     *
+     * This enables you to use component methods such as `setVelocity` or `isSensor` directly from
+     * this Game Object.
+     *
+     * You can also pass in either a Matter Body Configuration object, or a Matter Body instance
+     * to link with this Game Object.
+     * @param gameObject The Game Object to inject the Matter Components in to.
+     * @param options A Matter Body configuration object, or an instance of a Matter Body.
+     * @param addToWorld Add this Matter Body to the World? Default true.
+     */
     open fun gameObject(
         gameObject: GameObject,
         options: MatterBodyConfig = definedExternally,
         addToWorld: Boolean = definedExternally
     ): dynamic /* Phaser.Physics.Matter.Image | Phaser.Physics.Matter.Sprite | Phaser.GameObjects.GameObject */
 
-    open fun gameObject(gameObject: GameObject): dynamic /* Phaser.Physics.Matter.Image | Phaser.Physics.Matter.Sprite | Phaser.GameObjects.GameObject */
     open fun gameObject(
         gameObject: GameObject,
-        options: MatterBodyConfig = definedExternally
-    ): dynamic /* Phaser.Physics.Matter.Image | Phaser.Physics.Matter.Sprite | Phaser.GameObjects.GameObject */
-
-    open fun gameObject(
-        gameObject: GameObject,
-        options: Body = definedExternally,
+        options: MatterJS.Body = definedExternally,
         addToWorld: Boolean = definedExternally
-    ): dynamic /* Phaser.Physics.Matter.Image | Phaser.Physics.Matter.Sprite | Phaser.GameObjects.GameObject */
-
-    open fun gameObject(
-        gameObject: GameObject,
-        options: Body = definedExternally
     ): dynamic /* Phaser.Physics.Matter.Image | Phaser.Physics.Matter.Sprite | Phaser.GameObjects.GameObject */
 
     open fun destroy()
@@ -1010,7 +1016,13 @@ open external class Image : Phaser.GameObjects.Image, Bounce, Collision, Force, 
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Image /* this */
-    override fun setTint(topLeft: Number?, topRight: Number?, bottomLeft: Number?, bottomRight: Number?): Image /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Image /* this */
+
     override fun setTintFill(
         topLeft: Number?,
         topRight: Number?,
@@ -1752,7 +1764,13 @@ open external class Sprite : Phaser.GameObjects.Sprite, Bounce, Collision, Force
     override var tintBottomRight: Number
     override var tintFill: Boolean
     override fun clearTint(): Sprite /* this */
-    override fun setTint(topLeft: Number?, topRight: Number?, bottomLeft: Number?, bottomRight: Number?): Sprite /* this */
+    override fun setTint(
+        topLeft: Number?,
+        topRight: Number?,
+        bottomLeft: Number?,
+        bottomRight: Number?
+    ): Sprite /* this */
+
     override fun setTintFill(
         topLeft: Number?,
         topRight: Number?,

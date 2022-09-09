@@ -12,15 +12,20 @@ class Preloader : Scene(SceneKeys.PRELOADER) {
             ShaderKeys.STARS,
             "assets/shaders/stars.frag"
         )
+        load.bitmapFont(
+            BitmapFontKeys.ROBOTO_WHITE,
+            "assets/fonts/bitmap/roboto_white.png",
+            "assets/fonts/bitmap/roboto.xml"
+        )
         load.atlasXML(
             AtlasKeys.SPACE_SHOOTER,
             "assets/spritesheet/space_shooter.png",
             "assets/spritesheet/space_shooter.xml"
         )
-        load.bitmapFont(
-            BitmapFontKeys.ROBOTO_WHITE,
-            "assets/fonts/bitmap/roboto_white.png",
-            "assets/fonts/bitmap/roboto.xml"
+        load.atlas(
+            AtlasKeys.SPACE,
+            "assets/spritesheet/space.webp",
+            "assets/spritesheet/space.json"
         )
     }
 

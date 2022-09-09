@@ -117,7 +117,7 @@ val AppRoutes = FC<Props> {
 }
 
 val App = FC<Props> {
-    StrictMode { // causes useEffect to fire twice
+//    StrictMode { // causes useEffect to fire twice
         ThemeProvider {
             theme = uiTheme
             CssBaseline {}
@@ -125,5 +125,5 @@ val App = FC<Props> {
                 AppRoutes { }
             }
         }
-    }
+//    }
 }

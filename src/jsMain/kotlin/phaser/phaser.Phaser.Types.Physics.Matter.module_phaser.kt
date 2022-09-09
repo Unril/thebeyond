@@ -517,10 +517,15 @@ external interface MatterTileOptions {
 }
 
 external interface MatterWorldConfig {
-
+    /**
+     * Sets {@link Phaser.Physics.Matter.World#gravity}. If `false` Gravity will be set to zero.
+     */
     var gravity: dynamic /* Phaser.Types.Math.Vector2Like? | Boolean? */
         get() = definedExternally
         set(value) = definedExternally
+    /**
+     * Should the world have bounds enabled by default?
+     */
     var setBounds: dynamic /* Any? | Boolean? */
         get() = definedExternally
         set(value) = definedExternally
