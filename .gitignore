@@ -8,6 +8,7 @@
 *.iml
 *.ipr
 *.iws
+*.pid
 .DS_Store
 .apt_generated
 .classpath

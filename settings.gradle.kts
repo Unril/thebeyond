@@ -9,4 +9,4 @@ pluginManagement {
 rootProject.name = "thebeyond"
 
 
-DirectoryScanner.removeDefaultExclude("phaser/*.ts")
+//DirectoryScanner.removeDefaultExclude("phaser/*.ts")

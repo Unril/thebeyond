@@ -4,9 +4,13 @@
             <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="trace">
+
+    <logger name="org.eclipse.jetty" level="info"/>
+    <logger name="io.netty" level="info"/>
+    <logger name="org.komapper.SqlWithArgs" level="trace"/>
+    <logger name="org.komapper.Sql" level="trace"/>
+
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
-    <logger name="org.eclipse.jetty" level="INFO"/>
-    <logger name="io.netty" level="INFO"/>
 </configuration>

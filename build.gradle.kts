@@ -1,19 +1,19 @@
-val kotlinWrappersVersion = "1.0.0-pre.376"
-val serializationVersion = "1.4.0"
-val ktorVersion = "2.1.0"
-val logbackVersion = "1.3.0-beta0"
-val komapperVersion = "1.3.0"
+val komapperVersion: String by project
+val kotlinWrappersVersion: String by project
+val ktorVersion: String by project
+val logbackVersion: String by project
+val mockkVersion: String by project
+val r2dbcVersion: String by project
+val serializationVersion: String by project
+val striktVersion: String by project
+val kotlinLoggingVersion: String by project
 
 plugins {
     application
     id("com.google.devtools.ksp") version "1.7.10-1.0.6"
-    idea
     kotlin("multiplatform") version "1.7.10"
     kotlin("plugin.serialization") version "1.7.10"
 }
-
-group = "dev.thebeyond"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -37,6 +37,7 @@ kotlin {
             }
             commonWebpackConfig {
                 cssSupport.enabled = true
+                devtool = org.jetbrains.kotlin.gradle.targets.js.webpack.WebpackDevtool.EVAL_CHEAP_SOURCE_MAP
             }
         }
     }
@@ -54,28 +55,40 @@ kotlin {
             }
         }
         val jvmMain by getting {
+            kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin")
+
             dependencies {
-                implementation("org.komapper:komapper-starter-jdbc:$komapperVersion")
-                implementation("org.komapper:komapper-dialect-h2-jdbc:$komapperVersion")
+                implementation(project.dependencies.enforcedPlatform("org.komapper:komapper-platform:$komapperVersion"))
+                implementation("org.komapper:komapper-starter-r2dbc")
+                implementation("org.komapper:komapper-dialect-postgresql-r2dbc")
+                implementation("org.postgresql:r2dbc-postgresql:$r2dbcVersion")
 
                 implementation("ch.qos.logback:logback-classic:$logbackVersion")
+                implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-serialization:$ktorVersion")
-                implementation("io.ktor:ktor-server-auth:$ktorVersion")
                 implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+                implementation("io.ktor:ktor-server-auth:$ktorVersion")
+                implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
                 implementation("io.ktor:ktor-server-compression:$ktorVersion")
                 implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
                 implementation("io.ktor:ktor-server-cors:$ktorVersion")
-                implementation("io.ktor:ktor-server-html-builder-jvm:$ktorVersion")
                 implementation("io.ktor:ktor-server-netty:$ktorVersion")
+                implementation("io.ktor:ktor-server-resources:$ktorVersion")
             }
         }
         val jvmTest by getting {
+            kotlin.srcDir("build/generated/ksp/jvm/jvmTest/kotlin")
+
             dependencies {
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-server-test-host:$ktorVersion")
+
+                implementation("io.mockk:mockk:$mockkVersion")
+                implementation("io.strikt:strikt-core:$striktVersion")
+                implementation("io.strikt:strikt-mockk:$striktVersion")
             }
         }
         val jsMain by getting {
@@ -100,6 +113,10 @@ kotlin {
     }
 }
 
+ksp {
+    arg("komapper.namingStrategy", "lower_snake_case")
+}
+
 dependencies {
     add("kspJvm", "org.komapper:komapper-processor:$komapperVersion")
     add("kspJvmTest", "org.komapper:komapper-processor:$komapperVersion")
@@ -108,6 +125,13 @@ dependencies {
 application {
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
     mainClass.set("dev.thebeyond.application.ServerKt")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs +
+                "-opt-in=kotlin.RequiresOptIn"
+    }
 }
 
 // include JS artifacts in any JAR we generate
