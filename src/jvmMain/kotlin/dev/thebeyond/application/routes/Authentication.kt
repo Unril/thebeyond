@@ -5,7 +5,11 @@ import com.auth0.jwt.algorithms.Algorithm
 import dev.thebeyond.application.UsersRepository
 import dev.thebeyond.application.model.USER_ID_STRING_LENGTH
 import dev.thebeyond.application.model.User
+import dev.thebeyond.common.API_V1_AUTH_CHECK
+import dev.thebeyond.common.API_V1_AUTH_LOGIN
+import dev.thebeyond.common.API_V1_AUTH_REGISTER
 import dev.thebeyond.common.NewUserRegistration
+import dev.thebeyond.common.UserLogin
 import dev.thebeyond.common.UserToken
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -20,20 +24,31 @@ private val logger = KotlinLogging.logger {}
 
 private fun Application.configProperty(path: String) = environment.config.property(path).getString()
 
+data class JwtConfig(
+    val secret: String,
+    val issuer: String,
+    val realm: String,
+)
+
+fun Application.jwtConfig() = JwtConfig(
+    configProperty("jwt.secret"),
+    configProperty("jwt.issuer"),
+    configProperty("jwt.realm"),
+)
+
 const val USER_ID_CLAIM = "userid"
 
-fun Application.setupAuthentication() {
-    val jwtSecret = configProperty("jwt.secret")
-    val jwtIssuer = configProperty("jwt.issuer")
-    val jwtRealm = configProperty("jwt.realm")
+private fun JwtConfig.algorithm() = Algorithm.HMAC256(secret)
 
+private fun generateToken(jwtConf: JwtConfig, userId: String) =
+    JWT.create().withIssuer(jwtConf.issuer).withClaim(USER_ID_CLAIM, userId).sign(jwtConf.algorithm())!!
+
+fun Application.setupAuthentication(jwtConf: JwtConfig) {
     install(Authentication) {
         jwt {
-            realm = jwtRealm
+            realm = jwtConf.realm
             verifier(
-                JWT.require(Algorithm.HMAC256(jwtSecret))
-                    .withIssuer(jwtIssuer)
-                    .build()
+                JWT.require(jwtConf.algorithm()).withIssuer(jwtConf.issuer).build()
             )
             validate { credential ->
                 val id = credential.payload.getClaim(USER_ID_CLAIM).asString()
@@ -47,21 +62,39 @@ fun Application.setupAuthentication() {
     }
 }
 
-fun Application.addAuthenticationRoutes(usersRepo: UsersRepository) {
-    val jwtSecret = configProperty("jwt.secret")
-    val jwtIssuer = configProperty("jwt.issuer")
-
+fun Application.addAuthenticationRoutes(usersRepo: UsersRepository, jwtConf: JwtConfig) {
     routing {
-        get("/api/register") {
+        get(API_V1_AUTH_REGISTER) {
             val reg = call.receive<NewUserRegistration>()
             val user = User.new(reg.email, reg.name, reg.password)
             logger.info { "Register user $user" }
-            usersRepo.addUser(user)
-            val token = JWT.create()
-                .withIssuer(jwtIssuer)
-                .withClaim(USER_ID_CLAIM, user.id.toString())
-                .sign(Algorithm.HMAC256(jwtSecret))!!
+            usersRepo.createUser(user)
+            val token = generateToken(jwtConf, user.id.toString())
             call.respond(UserToken(token))
+        }
+
+        get(API_V1_AUTH_LOGIN) {
+            val login = call.receive<UserLogin>()
+            val user = usersRepo.userByEmail(login.email)
+            if (user == null) {
+                call.respond(HttpStatusCode.Unauthorized, "Invalid user email")
+                return@get
+            }
+            if (!user.password.checkPassword(login.password)) {
+                call.respond(HttpStatusCode.Unauthorized, "Invalid user password")
+                return@get
+            }
+            val token = generateToken(jwtConf, user.id.toString())
+            call.respond(UserToken(token))
+        }
+
+        authenticate {
+            get(API_V1_AUTH_CHECK) {
+                val principal = call.principal<JWTPrincipal>()!!
+                val id = principal.payload.getClaim(USER_ID_CLAIM).asString()
+                logger.info { "Check authentication with id $id" }
+                call.respond(HttpStatusCode.OK)
+            }
         }
     }
 }

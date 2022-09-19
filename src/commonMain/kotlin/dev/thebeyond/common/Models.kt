@@ -10,6 +10,12 @@ data class NewUserRegistration(
 )
 
 @Serializable
+data class UserLogin(
+    val email: String,
+    val password: String,
+)
+
+@Serializable
 data class UserToken(
     val token: String,
 )

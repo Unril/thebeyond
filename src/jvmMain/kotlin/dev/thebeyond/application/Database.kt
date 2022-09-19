@@ -23,7 +23,11 @@ fun Application.connectToDatabase(): R2dbcDatabase {
 }
 
 class DbUsersRepository(private val db_: R2dbcDatabase) : UsersRepository {
-    override fun addUser(user: User) {
+    override suspend fun createUser(user: User) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun userByEmail(email: String): User? {
         TODO("Not yet implemented")
     }
 

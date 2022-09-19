@@ -3,7 +3,6 @@ package dev.thebeyond.application
 import org.junit.jupiter.api.Test
 import strikt.api.*
 import strikt.assertions.*
-import org.junit.jupiter.api.Assertions.*
 
 internal class TokenPBKDF2Should {
     companion object {

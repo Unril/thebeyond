@@ -6,6 +6,11 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import kotlin.text.toCharArray
 
+/**
+ * Token generated using PBKDF2 algorithm.
+ *
+ * [Hashing a Password in Java](http://www.baeldung.com/java-password-hashing)
+ */
 @JvmInline
 value class TokenPBKDF2(val token: String) {
     companion object {

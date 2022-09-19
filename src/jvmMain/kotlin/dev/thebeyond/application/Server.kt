@@ -2,6 +2,7 @@ package dev.thebeyond.application
 
 import dev.thebeyond.application.routes.addAuthenticationRoutes
 import dev.thebeyond.application.routes.addStaticContentRoutes
+import dev.thebeyond.application.routes.jwtConfig
 import dev.thebeyond.application.routes.setupAuthentication
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
@@ -19,10 +20,12 @@ fun Application.module() {
         json()
     }
 
-    setupAuthentication()
-
+    val jwtConf = jwtConfig()
     val db = connectToDatabase()
+    val usersRepo = DbUsersRepository(db)
+
+    setupAuthentication(jwtConf)
 
     addStaticContentRoutes()
-    addAuthenticationRoutes(DbUsersRepository(db))
+    addAuthenticationRoutes(usersRepo, jwtConf)
 }
